@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+.venv/
+
+# Builds
+dist/
+storybook-static/
+*.tsbuildinfo
+
+# Caches
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+
+# Coverage
+coverage/
+.coverage
+htmlcov/
+
+# Local output
+frontend/screenshots/
+*storybook.log
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.DS_Store
+.token-optimizer/

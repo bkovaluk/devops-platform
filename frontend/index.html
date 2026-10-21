@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/mark.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevOps Platform</title>
+    <script>
+      // Runs before the first paint, so a light-theme reader never sees a dark flash.
+      ;(function () {
+        try {
+          var stored = JSON.parse(localStorage.getItem('platform-ui') || '{}')
+          var theme = (stored.state && stored.state.theme) || 'dark'
+          if (theme === 'system') {
+            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          }
+          if (theme !== 'dark' && theme !== 'light') theme = 'dark'
+          document.documentElement.className = theme
+        } catch (e) {
+          document.documentElement.className = 'dark'
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

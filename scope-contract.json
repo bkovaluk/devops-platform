@@ -1,0 +1,783 @@
+{
+  "cases": [
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "approvals:review"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:read"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:write"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": "invalid",
+      "grant": "*:*",
+      "required": "flags:read"
+    },
+    {
+      "expected": "invalid",
+      "grant": "*:read",
+      "required": "flags:read"
+    },
+    {
+      "expected": "invalid",
+      "grant": ":read",
+      "required": "flags:read"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:*",
+      "required": "approvals:review"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:*",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:*",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:*",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:dev",
+      "required": "approvals:review"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:*:dev",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:dev",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:dev",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:prod",
+      "required": "approvals:review"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:prod",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:*:prod",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:prod",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:staging",
+      "required": "approvals:review"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:staging",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:*:staging",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:*:staging",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:review",
+      "required": "approvals:review"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:review",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:review",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:review",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:write"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:dev",
+      "required": "approvals:review"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:review:dev",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:dev",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:dev",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:prod",
+      "required": "approvals:review"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:prod",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:review:prod",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:prod",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:staging",
+      "required": "approvals:review"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:staging",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "approvals:review:staging",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "approvals:review:staging",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags",
+      "required": "flags:read"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:",
+      "required": "flags:read"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:read"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:write"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:dev",
+      "required": "flags:read"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*:dev",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:dev",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:dev",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:dev",
+      "required": "flags:write"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*:dev",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:dev",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:dev",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:prod",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:prod",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*:prod",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:prod",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:prod",
+      "required": "flags:write"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:prod",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*:prod",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:prod",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:staging",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:staging",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:staging",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*:staging",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:staging",
+      "required": "flags:write"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:staging",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:*:staging",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:*:staging",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags::read",
+      "required": "flags:read"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:destroy",
+      "required": "flags:read"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read",
+      "required": "*"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read",
+      "required": "*:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "approvals:review"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read",
+      "required": "flags"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read",
+      "required": "flags:*"
+    },
+    {
+      "expected": true,
+      "grant": "flags:read",
+      "required": "flags:read"
+    },
+    {
+      "expected": true,
+      "grant": "flags:read",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read",
+      "required": "flags:read:nowhere"
+    },
+    {
+      "expected": true,
+      "grant": "flags:read",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:read",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "flags:write"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read",
+      "required": "nope:read"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read:*",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:dev",
+      "required": "flags:read"
+    },
+    {
+      "expected": true,
+      "grant": "flags:read:dev",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:dev",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:dev",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read:dev:extra",
+      "required": "flags:read"
+    },
+    {
+      "expected": "invalid",
+      "grant": "flags:read:nowhere",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:prod",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:prod",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "flags:read:prod",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:prod",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:staging",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:staging",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read:staging",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:read:staging",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write",
+      "required": "flags:read"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write",
+      "required": "flags:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write",
+      "required": "flags:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write",
+      "required": "flags:read:staging"
+    },
+    {
+      "expected": true,
+      "grant": "flags:write",
+      "required": "flags:write"
+    },
+    {
+      "expected": true,
+      "grant": "flags:write",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": true,
+      "grant": "flags:write",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:write",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:dev",
+      "required": "flags:write"
+    },
+    {
+      "expected": true,
+      "grant": "flags:write:dev",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:dev",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:dev",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:prod",
+      "required": "flags:write"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:prod",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": true,
+      "grant": "flags:write:prod",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:prod",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:staging",
+      "required": "flags:write"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:staging",
+      "required": "flags:write:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:write:staging",
+      "required": "flags:write:prod"
+    },
+    {
+      "expected": true,
+      "grant": "flags:write:staging",
+      "required": "flags:write:staging"
+    },
+    {
+      "expected": "invalid",
+      "grant": "nope:read",
+      "required": "flags:read"
+    }
+  ],
+  "grammar": "<tool>:<action>[:<env>]",
+  "invalid_grants": [
+    "flags",
+    "flags:",
+    ":read",
+    "flags::read",
+    "nope:read",
+    "flags:destroy",
+    "flags:read:nowhere",
+    "flags:read:dev:extra",
+    "*:read",
+    "*:*",
+    "flags:read:*"
+  ],
+  "invalid_requirements": [
+    "*",
+    "flags:*",
+    "*:read",
+    "flags",
+    "nope:read",
+    "flags:read:nowhere"
+  ],
+  "qualifiers": [
+    "dev",
+    "staging",
+    "prod"
+  ],
+  "roles": {
+    "admin": [
+      "*"
+    ],
+    "editor": [
+      "flags:read",
+      "flags:write"
+    ],
+    "reviewer": [
+      "flags:read",
+      "approvals:review"
+    ],
+    "viewer": [
+      "flags:read"
+    ]
+  },
+  "tools": {
+    "approvals": [
+      "review"
+    ],
+    "flags": [
+      "read",
+      "write"
+    ]
+  },
+  "version": 1,
+  "wildcard": "*"
+}

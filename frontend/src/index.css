@@ -1,0 +1,732 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+/* --------------------------------------------------------------------------
+   Dynamic tokens. `@theme inline` makes Tailwind generate utilities
+   (bg-background, text-foreground, …) that read the var() at runtime, so the
+   `.dark` / `.light` class on <html> switches every surface at once.
+-------------------------------------------------------------------------- */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  /* Third and fourth tone steps. Structure comes from tone, not from 1px
+     dividers: --panel is the detail/content step, --well the inset one. */
+  --color-panel: var(--panel);
+  --color-well: var(--well);
+
+  /* The shell frame: one chrome surface for the rail and the top bar, and the
+     workspace inset into it, told apart by shape rather than another tone. */
+  --color-surface-chrome: var(--surface-chrome);
+  --color-surface-workspace: var(--surface-workspace);
+  --color-workspace-border: var(--workspace-border);
+  --radius-workspace: var(--workspace-radius);
+  --shadow-workspace: var(--workspace-shadow);
+  --shadow-overlay: var(--overlay-shadow);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-tooltip: var(--tooltip);
+  --color-tooltip-foreground: var(--tooltip-foreground);
+  --color-tooltip-border: var(--tooltip-border);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-shell-separator: var(--shell-separator);
+
+  --color-dim-foreground: var(--dim-foreground);
+
+  /* The signal fill: selection marks, tab underlines, the segmented whisper,
+     focus. One token per theme, because a text boost cannot reach a bg-*. */
+  --color-signal: var(--signal);
+
+  /* Data ink: the neutral a chart draws an ordinary reading in, and the
+     stronger step the pointer raises one column to. Not a text step. */
+  --color-data-ink: var(--data-ink);
+  --color-data-ink-strong: var(--data-ink-strong);
+
+  /* State: the only place "how is this doing" colour comes from. Each has a
+     fill at the same hue so text-state-x on bg-state-x-fill holds AA. */
+  --color-state-ok: var(--state-ok);
+  --color-state-warn: var(--state-warn);
+  --color-state-bad: var(--state-bad);
+  --color-state-unknown: var(--state-unknown);
+  --color-state-info: var(--state-info);
+  --color-state-ok-fill: var(--state-ok-fill);
+  --color-state-warn-fill: var(--state-warn-fill);
+  --color-state-bad-fill: var(--state-bad-fill);
+  --color-state-unknown-fill: var(--state-unknown-fill);
+  --color-state-info-fill: var(--state-info-fill);
+
+  --color-glass-text-emerald: var(--glass-text-emerald);
+  --color-glass-text-amber: var(--glass-text-amber);
+  --color-glass-text-rose: var(--glass-text-rose);
+
+  /* Environment signals — their own family, never state colours. */
+  --color-env-dev: var(--env-dev);
+  --color-env-qa: var(--env-qa);
+  --color-env-staging: var(--env-staging);
+  --color-env-prod: var(--env-prod);
+  --color-env-other: var(--env-other);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+}
+
+/* --------------------------------------------------------------------------
+   Static tokens — identical in every theme.
+-------------------------------------------------------------------------- */
+@theme {
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-cyan-400: #22d3ee;
+  --color-cyan-500: #06b6d4;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-amber-400: #fbbf24;
+  --color-amber-500: #f59e0b;
+  --color-indigo-400: #818cf8;
+  --color-indigo-500: #6366f1;
+
+  /* Amber as text. The -400 → -600 light boost reaches only ~3.2:1 on the
+     card, so amber prose carries its own per-theme token. */
+  --color-amber-text: #fbbf24;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius: 0.5rem;
+
+  /* Gutters: a full-width page, the list column, an inspector pane or sheet. */
+  --spacing-gutter-page: 1.5rem;
+  --spacing-gutter-list: 1rem;
+  --spacing-gutter-pane: 1.25rem;
+
+  /* Approval-routed env banner tints, translucent so one value fits both themes. */
+  --color-banner-staging: rgba(139, 92, 246, 0.08);
+  --color-banner-prod: rgba(251, 113, 133, 0.08);
+  --color-banner-other: rgba(142, 154, 178, 0.1);
+
+  /* The families src/fonts.ts loads. Martian Mono runs wide, so mono text is
+     set on its narrow width; the wordmark is the display face at full width
+     (`font-display font-stretch-125%`). */
+  --font-sans: 'Mona Sans Variable', system-ui, -apple-system, sans-serif;
+  --font-display: 'Hubot Sans Variable', 'Mona Sans Variable', system-ui, sans-serif;
+  --font-mono: 'Martian Mono Variable', 'Cascadia Code', monospace;
+  --font-mono--font-variation-settings: 'wdth' 87.5;
+
+  /* The steps between Tailwind's: nano 11, xs 12, label 13, sm 14,
+     heading 15, base 16, title 17. */
+  --text-nano: 0.6875rem;
+  --text-nano--line-height: 1.5;
+  --text-label: 0.8125rem;
+  --text-label--line-height: 1.5;
+  --text-heading: 0.9375rem;
+  --text-heading--line-height: 1.5;
+  --text-title: 1.0625rem;
+  --text-title--line-height: 1.5;
+
+  /* Every timing in the app: transitions, @starting-style entries and view
+     transitions all read these. */
+  --duration-fast: 120ms;
+  --duration: 200ms;
+  --duration-slide: 220ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-slide: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Wide-gamut displays: the same hue and lightness as each hex, ~12% more chroma. */
+@media (color-gamut: p3) {
+  :root {
+    --color-emerald-400: oklch(77.3% 0.172 163.2);
+    --color-emerald-500: oklch(69.6% 0.167 162.5);
+    --color-cyan-400: oklch(79.7% 0.15 211.5);
+    --color-cyan-500: oklch(71.5% 0.141 215.2);
+    --color-rose-400: oklch(71.9% 0.189 13.4);
+    --color-rose-500: oklch(64.5% 0.241 16.4);
+    --color-amber-400: oklch(83.7% 0.184 84.4);
+    --color-amber-500: oklch(76.9% 0.184 70.1);
+    --color-indigo-400: oklch(68% 0.177 276.9);
+    --color-indigo-500: oklch(58.5% 0.229 277.1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Dark (default) — an ink-blue ramp: hue ~268, chroma ~.02–.04 held on every
+   step. The blue is what keeps a borderless near-black UI from reading grey;
+   never flatten these toward a neutral.
+-------------------------------------------------------------------------- */
+:root {
+  --background: #0b0e18;
+  --foreground: #e6ecf6;
+  --card: #111624;
+  --card-foreground: #e6ecf6;
+  --panel: #171d2d;
+  --well: #20283b;
+
+  /* The workspace carries the panel tone; the chrome keeps the page tone, and
+     the frame is drawn by inset, radius and an edge that bounds no control. */
+  --surface-chrome: #0b0e18;
+  --surface-workspace: #171d2d;
+  --workspace-radius: 10px;
+  --workspace-inset: 8px;
+  --workspace-border: #34405a;
+  --workspace-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 8px 24px -14px rgba(0, 0, 0, 0.55);
+
+  --popover: #171d2d;
+  --popover-foreground: #e6ecf6;
+
+  /* Hints: a solid raised chip, lighter than any panel. */
+  --tooltip: #2b3550;
+  --tooltip-foreground: #f4f7fc;
+  --tooltip-border: #3b4664;
+
+  --primary: #10b981;
+  --primary-foreground: #ffffff;
+  --secondary: #20283b;
+  --secondary-foreground: #e6ecf6;
+  --muted: #343f56;
+  --muted-foreground: #a1adc2;
+
+  /* Hover / selected fill. Solid, never a veil: a translucent overlay picks up
+     whatever is under it, so one hover would read three ways. */
+  --accent: #293249;
+  --accent-foreground: #e6ecf6;
+
+  --destructive: #f43f5e;
+  --destructive-foreground: #ffffff;
+
+  /* Overlay edges only. Panel seams use the one shell separator. */
+  --border: #283147;
+  --input: #3b4963;
+  --ring: #10b981;
+  --shell-separator: rgba(255, 255, 255, 0.06);
+
+  --dim-foreground: #8e9ab2;
+
+  --sidebar: #0b0e18;
+  --sidebar-foreground: #e6ecf6;
+  --sidebar-accent: var(--card);
+
+  --env-dev: #4ade80;
+  --env-qa: #38bdf8;
+  --env-staging: #8b5cf6;
+  --env-prod: #fb7185;
+  --env-other: #a1adc2;
+
+  --signal: var(--color-emerald-400);
+
+  --state-ok: #34d399;
+  --state-warn: #fbbf24;
+  --state-bad: #fb7185;
+  --state-unknown: #8e9ab2;
+  --state-info: #818cf8;
+  --state-ok-fill: color-mix(in srgb, var(--state-ok) 14%, transparent);
+  --state-warn-fill: color-mix(in srgb, var(--state-warn) 14%, transparent);
+  --state-bad-fill: color-mix(in srgb, var(--state-bad) 14%, transparent);
+  /* Grey has less room than a hue: this fill backs readings, never rows that light up. */
+  --state-unknown-fill: color-mix(in srgb, var(--state-unknown) 14%, transparent);
+  --state-info-fill: color-mix(in srgb, var(--state-info) 14%, transparent);
+
+  --data-ink: #4f6086;
+  --data-ink-strong: #c3cde0;
+
+  --overlay-shadow: 0 8px 28px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.06);
+  --color-overlay: rgba(0, 0, 0, 0.6);
+  --color-highlight-bg: rgba(255, 255, 255, 0.1);
+  --color-highlight-text: rgba(255, 255, 255, 0.95);
+
+  /* The glass tier's labels sit one step past the prose accents so they hold
+     4.5:1 on card, panel and well at rest and on hover. */
+  --glass-text-emerald: #6ee7b7;
+  --glass-text-amber: #fbbf24;
+  --glass-text-rose: #fda4af;
+}
+
+/* --------------------------------------------------------------------------
+   Light — a paper ramp at the same ~270 hue. The order inverts: chrome is one
+   step darker than the work, so the columns read as lit paper on a tinted desk.
+-------------------------------------------------------------------------- */
+.light {
+  --background: #e9ebf3;
+  --foreground: #111524;
+  --card: #f3f4f9;
+  --card-foreground: #111524;
+  --panel: #f7f8fb;
+  --well: #e7e9f0;
+
+  --surface-chrome: #eef0f5;
+  --surface-workspace: #ffffff;
+  --workspace-border: var(--border);
+  --workspace-shadow: 0 1px 2px rgba(17, 22, 36, 0.05), 0 6px 20px -12px rgba(17, 22, 36, 0.14);
+
+  --popover: #f7f8fb;
+  --popover-foreground: #111524;
+
+  --tooltip: #1b2133;
+  --tooltip-foreground: #f4f7fc;
+  --tooltip-border: #323b55;
+
+  --secondary: #e7e9f0;
+  --secondary-foreground: #111524;
+  --muted: #d9dde8;
+  --muted-foreground: #545b70;
+  --accent: #dfe3ec;
+  --accent-foreground: #111524;
+
+  --border: rgba(17, 21, 36, 0.12);
+  --input: rgba(17, 21, 36, 0.16);
+  --ring: var(--signal);
+  --shell-separator: rgba(17, 21, 36, 0.1);
+
+  --dim-foreground: #596175;
+
+  --sidebar: #e9ebf3;
+  --sidebar-foreground: #111524;
+  --sidebar-accent: var(--card);
+
+  /* -800/-900 weights, so each env is text on paper, not a tint that only
+     works as a dot. */
+  --env-dev: #166534;
+  --env-qa: #075985;
+  --env-staging: #6d28d9;
+  --env-prod: #be123c;
+  --env-other: #545b70;
+
+  --signal: #047857;
+
+  /* -800 tones: a state has to read as text on the card and on its own fill. */
+  --state-ok: #035d45;
+  --state-warn: #92400e;
+  --state-bad: #9f1239;
+  --state-unknown: #596175;
+  --state-info: #4338ca;
+  --state-ok-fill: color-mix(in srgb, var(--state-ok) 12%, transparent);
+  --state-warn-fill: color-mix(in srgb, var(--state-warn) 12%, transparent);
+  --state-bad-fill: color-mix(in srgb, var(--state-bad) 12%, transparent);
+  --state-unknown-fill: color-mix(in srgb, var(--state-unknown) 12%, transparent);
+  --state-info-fill: color-mix(in srgb, var(--state-info) 12%, transparent);
+
+  /* On paper contrast is darkness, so the pointer's step is the darker one. */
+  --data-ink: #8a93a8;
+  --data-ink-strong: #3f475c;
+
+  --overlay-shadow: 0 8px 24px rgba(17, 21, 36, 0.12), 0 0 0 1px rgba(17, 21, 36, 0.06);
+  --color-overlay: rgba(17, 21, 36, 0.24);
+  --color-highlight-bg: rgba(4, 120, 87, 0.16);
+  --color-highlight-text: #065f46;
+
+  --color-amber-text: #92400e;
+
+  --glass-text-emerald: #065f46;
+  --glass-text-amber: #92400e;
+  --glass-text-rose: #9f1239;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+-------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 4px;
+}
+.light ::-webkit-scrollbar-thumb {
+  background: #c3c9d9;
+}
+
+@layer base {
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   View transitions. The theme and the environment crossfade the whole page
+   (root); a list opening its detail, or the inbox changing its lens, swaps
+   only the pane (`TRANSITION_PANE` in lib/view-transition.ts): the old
+   reading fades, the new one rises 4px into place.
+-------------------------------------------------------------------------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration);
+  animation-timing-function: var(--ease-standard);
+}
+
+::view-transition-old(pane) {
+  animation: var(--duration-fast) var(--ease-standard) both pane-out;
+}
+::view-transition-new(pane) {
+  animation: var(--duration-slide) var(--ease-slide) both pane-in;
+}
+@keyframes pane-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pane-in {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Resource names and values, a step under the 13px sans they sit beside:
+   Martian Mono's tall x-height reads a step larger than its size. */
+.mono {
+  font-family: var(--font-mono);
+  font-variation-settings: var(--font-mono--font-variation-settings);
+  font-size: var(--text-xs);
+}
+
+/* --------------------------------------------------------------------------
+   Overlay material
+-------------------------------------------------------------------------- */
+
+/* Liquid glass with restraint: overlays only (dialogs, the command palette). */
+.glass {
+  background: rgba(17, 22, 36, 0.72);
+  backdrop-filter: blur(12px) saturate(1.3);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+.light .glass {
+  background: rgba(247, 248, 251, 0.95);
+  backdrop-filter: blur(12px) saturate(1.05);
+  box-shadow:
+    0 12px 32px rgba(17, 21, 36, 0.14),
+    0 0 0 1px rgba(17, 21, 36, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   Type utilities. Caps live in exactly two: section heads and column heads.
+-------------------------------------------------------------------------- */
+@utility uppercase-label {
+  font-family: var(--font-mono);
+  font-variation-settings: var(--font-mono--font-variation-settings);
+  font-size: var(--text-nano);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@utility column-label {
+  font-family: var(--font-mono);
+  font-variation-settings: var(--font-mono--font-variation-settings);
+  font-size: var(--text-nano);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* Form, dt and stat labels: sentence case, never caps. */
+@utility field-label {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+/* A count beside a word, a head or a tab: mono nano, tabular, dim. */
+@utility count {
+  font-family: var(--font-mono);
+  font-variation-settings: var(--font-mono--font-variation-settings);
+  font-size: var(--text-nano);
+  font-variant-numeric: tabular-nums;
+  color: var(--dim-foreground);
+}
+
+/* The one signal bar in a list: selection. */
+.select-bar::before {
+  box-shadow: 0 0 8px rgba(52, 211, 153, 0.55);
+}
+.light .select-bar::before {
+  box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Action material
+-------------------------------------------------------------------------- */
+
+/* Ink primary: the page's own contrast inverted. */
+.btn-ink {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.55),
+    0 1px 2px 0 rgba(0, 0, 0, 0.5);
+}
+.btn-ink:hover:not([aria-disabled='true']) {
+  filter: brightness(1.1);
+}
+.light .btn-ink {
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12),
+    0 1px 2px 0 rgba(0, 0, 0, 0.25);
+}
+.light .btn-ink:hover:not([aria-disabled='true']) {
+  filter: none;
+  background-color: color-mix(in srgb, var(--foreground) 86%, #ffffff);
+}
+
+/* The consequence tier: one material, the hue and its text arrive from the
+   variant as --glass-hue / --glass-text. */
+.btn-glass {
+  background: color-mix(in srgb, var(--glass-hue) 12%, transparent);
+  color: var(--glass-text);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-hue) 28%, transparent),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+.btn-glass:hover:not([aria-disabled='true']) {
+  background: color-mix(in srgb, var(--glass-hue) 20%, transparent);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--glass-hue) 45%, transparent),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+.light .btn-glass {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glass-hue) 32%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   Native popovers (lib/popover.ts): hints, menus, the minute popover. In the
+   top layer, placed against their anchor by position-area. The user agent
+   centres a popover in the viewport; `.anchored` hands that back to the
+   anchor, and a browser without anchor positioning gets measured top/left.
+-------------------------------------------------------------------------- */
+@layer components {
+  .anchored {
+    inset: auto;
+    margin: 0;
+  }
+
+  /* Enters from @starting-style; on the way out, display and overlay are
+     held (allow-discrete) until the fade finishes. */
+  .popover-motion {
+    opacity: 0;
+    scale: 0.97;
+    transition-property: opacity, scale, display, overlay;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+    transition-behavior: allow-discrete;
+  }
+  .popover-motion:popover-open {
+    opacity: 1;
+    scale: 1;
+  }
+  @starting-style {
+    .popover-motion:popover-open {
+      opacity: 0;
+      scale: 0.97;
+    }
+  }
+}
+
+/* A centred box near an edge slides along its side before it gives up. */
+@position-try --top-start {
+  position-area: top span-right;
+}
+@position-try --top-end {
+  position-area: top span-left;
+}
+@position-try --bottom-start {
+  position-area: bottom span-right;
+}
+@position-try --bottom-end {
+  position-area: bottom span-left;
+}
+
+/* --------------------------------------------------------------------------
+   Segmented control: one pill anchored to the checked option, so a new
+   choice slides it across. Without anchor positioning the option fills.
+-------------------------------------------------------------------------- */
+.segmented-pill {
+  position: absolute;
+  top: anchor(top);
+  right: anchor(right);
+  bottom: anchor(bottom);
+  left: anchor(left);
+  border-radius: 5px;
+  background: var(--accent);
+  transition:
+    left var(--duration-fast) var(--ease-standard),
+    right var(--duration-fast) var(--ease-standard);
+}
+
+@supports not (anchor-name: --probe) {
+  .segmented-pill {
+    display: none;
+  }
+  .segmented-option[aria-checked='true'] {
+    background: var(--accent);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Toasts (components/ui/toaster.tsx): rise in, fade out, follow a swipe and
+   leave the way they were swiped.
+-------------------------------------------------------------------------- */
+.toast {
+  translate: var(--toast-swipe-movement-x, 0px) var(--toast-swipe-movement-y, 0px);
+  transition:
+    opacity var(--duration) var(--ease-standard),
+    translate var(--duration-slide) var(--ease-slide);
+
+  &[data-swiping] {
+    transition: none;
+  }
+  &[data-ending-style] {
+    opacity: 0;
+  }
+  &[data-ending-style][data-swipe-direction='right'] {
+    translate: calc(var(--toast-swipe-movement-x, 0px) + 110%) var(--toast-swipe-movement-y, 0px);
+  }
+  &[data-ending-style][data-swipe-direction='down'] {
+    translate: var(--toast-swipe-movement-x, 0px) calc(var(--toast-swipe-movement-y, 0px) + 110%);
+  }
+  &[data-limited] {
+    display: none;
+  }
+}
+@starting-style {
+  .toast {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Metric track
+-------------------------------------------------------------------------- */
+
+/* Columns rise once as the chart arrives; a refetch redraws heights without
+   replaying the sweep, because the element is never re-created. */
+@keyframes track-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+.track-grow {
+  transform-origin: bottom;
+  animation: track-grow 550ms var(--ease-slide) both;
+}
+
+/* --------------------------------------------------------------------------
+   Skeleton
+-------------------------------------------------------------------------- */
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.shimmer {
+  background: linear-gradient(90deg, var(--border) 0%, var(--input) 40%, var(--border) 80%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.light .shimmer {
+  background: linear-gradient(90deg, #dfe3ec 0%, #c9cfe0 40%, #dfe3ec 80%);
+  background-size: 800px 100%;
+}
+
+/* Light boosts for -400 accent text, which reads as a tint on paper. */
+.light .text-emerald-400 {
+  color: #059669;
+}
+.light .text-cyan-400 {
+  color: #0891b2;
+}
+.light .text-amber-400 {
+  color: #d97706;
+}
+.light .text-indigo-400 {
+  color: #4f46e5;
+}
+.light .text-rose-400 {
+  color: #e11d48;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Reduced motion is handled here, once: every transition, keyframe and
+     @starting-style entry collapses to a tiny duration that keeps the state
+     change, and view transitions swap without animating. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

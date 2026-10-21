@@ -1,0 +1,1722 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "devops-platform",
+  "homepage": "https://github.com/bkovaluk/devops-platform",
+  "items": [
+    {
+      "name": "tokens",
+      "type": "registry:style",
+      "title": "Tokens",
+      "description": "The design tokens and global CSS: the ink-blue dark ramp and the paper light ramp, state, signal, env and data-ink colours, the font families, the seven-step type scale, gutters, motion timings, the caps label utilities, the @position-try fallbacks for anchored popovers, and the reduced-motion catch-all. Replaces src/index.css; Tailwind CSS v4.",
+      "extends": "none",
+      "dependencies": [
+        "tailwindcss@^4.3.3"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/index.css",
+          "type": "registry:file",
+          "target": "~/src/index.css"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "fonts",
+      "type": "registry:lib",
+      "title": "Fonts",
+      "description": "The font files, from Fontsource packages, imported once. The families they declare are named in the tokens.",
+      "dependencies": [
+        "@fontsource-variable/hubot-sans@^5.3.0",
+        "@fontsource-variable/martian-mono@^5.3.0",
+        "@fontsource-variable/mona-sans@^5.3.0"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/fonts.ts",
+          "type": "registry:lib",
+          "target": "~/src/fonts.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "utils",
+      "type": "registry:lib",
+      "title": "Utils",
+      "description": "`cn` (clsx + tailwind-merge) and the date helpers every surface formats with.",
+      "dependencies": [
+        "clsx@^2.1.1",
+        "tailwind-merge@^3.7.0"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/lib/utils.ts",
+          "type": "registry:lib",
+          "target": "@lib/utils.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "env",
+      "type": "registry:lib",
+      "title": "Environment colours",
+      "description": "Environment names, labels and the one place env colour comes from: dev green, qa sky, staging violet, prod rose, anything else neutral.",
+      "files": [
+        {
+          "path": "frontend/src/lib/env.ts",
+          "type": "registry:lib",
+          "target": "@lib/env.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "theme-constants",
+      "type": "registry:lib",
+      "title": "Tool accents",
+      "description": "TOOL_ACCENTS: the one source of a tool’s identity colour.",
+      "files": [
+        {
+          "path": "frontend/src/lib/theme-constants.ts",
+          "type": "registry:lib",
+          "target": "@lib/theme-constants.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:lib",
+      "title": "Anchored popovers",
+      "description": "Native popovers placed with CSS anchor positioning: anchor names, placement styles, and a measured fallback for browsers without anchor positioning. No portals, no z-index.",
+      "files": [
+        {
+          "path": "frontend/src/lib/popover.ts",
+          "type": "registry:lib",
+          "target": "@lib/popover.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "view-transition",
+      "type": "registry:lib",
+      "title": "View transitions",
+      "description": "`withViewTransition` for whole-page swaps (env, theme) and `TRANSITION_PANE` for the pane a list navigation swaps.",
+      "files": [
+        {
+          "path": "frontend/src/lib/view-transition.ts",
+          "type": "registry:lib",
+          "target": "@lib/view-transition.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:lib",
+      "title": "Toast manager",
+      "description": "The global Base UI toast manager: raise a toast from anywhere, inside React or not.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/lib/toast.ts",
+          "type": "registry:lib",
+          "target": "@lib/toast.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "use-copy",
+      "type": "registry:hook",
+      "title": "useCopy",
+      "description": "Copy to the clipboard and hold a \"copied\" state long enough to be seen.",
+      "files": [
+        {
+          "path": "frontend/src/lib/use-copy.ts",
+          "type": "registry:hook",
+          "target": "@lib/use-copy.ts"
+        }
+      ],
+      "categories": [
+        "hooks"
+      ]
+    },
+    {
+      "name": "ui-store",
+      "type": "registry:lib",
+      "title": "UI store",
+      "description": "Client state no server owns (theme, rail, overlays) in Zustand, and the effect that applies the theme class to <html>.",
+      "dependencies": [
+        "zustand@^5.0.15"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/stores/ui-store.ts",
+          "type": "registry:lib",
+          "target": "~/src/stores/ui-store.ts"
+        },
+        {
+          "path": "frontend/src/lib/use-theme.ts",
+          "type": "registry:hook",
+          "target": "@lib/use-theme.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "api-types",
+      "type": "registry:lib",
+      "title": "API types",
+      "description": "The API’s shapes under the names the UI uses, re-exported from types generated from the backend’s openapi.json.",
+      "files": [
+        {
+          "path": "frontend/src/types/api.ts",
+          "type": "registry:lib",
+          "target": "~/src/types/api.ts"
+        },
+        {
+          "path": "frontend/src/types/api-generated.ts",
+          "type": "registry:lib",
+          "target": "~/src/types/api-generated.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "identity",
+      "type": "registry:lib",
+      "title": "Identity",
+      "description": "Who is asking: the bearer credential, the admin view-as lens, and `identityGeneration`, the one number that moves whenever the account, the lens or a grant changes.",
+      "dependencies": [
+        "zustand@^5.0.15"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/features/auth/auth-store.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/auth/auth-store.ts"
+        },
+        {
+          "path": "frontend/src/features/auth/view-as.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/auth/view-as.ts"
+        },
+        {
+          "path": "frontend/src/features/auth/identity-generation.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/auth/identity-generation.ts"
+        }
+      ],
+      "categories": [
+        "hooks"
+      ]
+    },
+    {
+      "name": "api-client",
+      "type": "registry:lib",
+      "title": "API client",
+      "description": "`apiFetch` with the credential and view-as headers, `APIError` and `IdentityChangedError`, and the app’s one QueryClient.",
+      "dependencies": [
+        "@tanstack/react-query@^5.104.5"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/identity"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/lib/api-client.ts",
+          "type": "registry:lib",
+          "target": "@lib/api-client.ts"
+        },
+        {
+          "path": "frontend/src/lib/query-client.ts",
+          "type": "registry:lib",
+          "target": "@lib/query-client.ts"
+        }
+      ],
+      "categories": [
+        "hooks"
+      ]
+    },
+    {
+      "name": "identity-bound-mutation",
+      "type": "registry:hook",
+      "title": "useIdentityBoundMutation",
+      "description": "The only way to write: a TanStack mutation that belongs, start to finish, to the identity that started it, so retries, rollbacks and invalidations never act for somebody else.",
+      "dependencies": [
+        "@tanstack/react-query@^5.104.5"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/identity"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/features/auth/use-identity-bound-mutation.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/auth/use-identity-bound-mutation.ts"
+        }
+      ],
+      "categories": [
+        "hooks"
+      ]
+    },
+    {
+      "name": "scopes",
+      "type": "registry:lib",
+      "title": "Scopes",
+      "description": "The scope grammar (`<tool>:<action>[:<qualifier>]`, `inEnv`, `inAnyEnv`, `can`, `canAny`) checked against the shared scope-contract.json, `useScopes()` over /auth/me, and the cache boundaries an identity change enforces.",
+      "dependencies": [
+        "@tanstack/react-query@^5.104.5"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/api-types",
+        "bkovaluk/devops-platform/identity",
+        "bkovaluk/devops-platform/toast",
+        "bkovaluk/devops-platform/tool-registry"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/features/auth/permissions.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/auth/permissions.ts"
+        },
+        {
+          "path": "frontend/src/features/auth/scope-contract.json",
+          "type": "registry:lib",
+          "target": "~/src/features/auth/scope-contract.json"
+        },
+        {
+          "path": "frontend/src/features/auth/use-scopes.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/auth/use-scopes.ts"
+        },
+        {
+          "path": "frontend/src/features/auth/use-auth-me.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/auth/use-auth-me.ts"
+        },
+        {
+          "path": "frontend/src/features/auth/identity-cache.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/auth/identity-cache.ts"
+        }
+      ],
+      "categories": [
+        "hooks"
+      ]
+    },
+    {
+      "name": "config",
+      "type": "registry:hook",
+      "title": "useConfig",
+      "description": "GET /config: the app name, the environments, and which of them apply writes directly.",
+      "dependencies": [
+        "@tanstack/react-query@^5.104.5"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/api-types"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/features/config/use-config.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/config/use-config.ts"
+        }
+      ],
+      "categories": [
+        "hooks"
+      ]
+    },
+    {
+      "name": "resource-links",
+      "type": "registry:lib",
+      "title": "Resource links",
+      "description": "The typed vocabulary of shareable URLs: every linkable resource and the path it opens.",
+      "files": [
+        {
+          "path": "frontend/src/lib/resource-links.ts",
+          "type": "registry:lib",
+          "target": "@lib/resource-links.ts"
+        }
+      ],
+      "categories": [
+        "foundation"
+      ]
+    },
+    {
+      "name": "section-header",
+      "type": "registry:ui",
+      "title": "SectionHeader",
+      "description": "Every section head: `page` (display 15px, a reading on the right), `pane` (caps label with a hairline), `pane danger`; with SECTION_GAP and SECTION_HEAD_GAP.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/section-header.tsx",
+          "type": "registry:ui",
+          "target": "@ui/section-header.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "fold",
+      "type": "registry:ui",
+      "title": "Fold",
+      "description": "`Fold`, `FoldRow` and `ShowMore` on Base UI Collapsible: a turning left chevron, dashed rules, actions outside the trigger, bodies kept mounted for find-in-page.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/list-card",
+        "bkovaluk/devops-platform/section-header",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/fold.tsx",
+          "type": "registry:ui",
+          "target": "@ui/fold.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "hint",
+      "type": "registry:ui",
+      "title": "Hint and InfoTip",
+      "description": "`Hint` names a control on hover or focus; `InfoTip` and `InfoTerm` hand over the sentence behind a word on a press. Both are native popovers anchored to their trigger; no native title anywhere.",
+      "dependencies": [
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/popover",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/hint.tsx",
+          "type": "registry:ui",
+          "target": "@ui/hint.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "menu",
+      "type": "registry:ui",
+      "title": "Menu",
+      "description": "A native-popover menu: arrows, Home, End and type-ahead, closes on Escape, Tab or a press outside, and hands focus back to its trigger.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/popover",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/menu.tsx",
+          "type": "registry:ui",
+          "target": "@ui/menu.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "EmptyState",
+      "description": "The empty state, in page, inspector and inline sizes.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/empty-state.tsx",
+          "type": "registry:ui",
+          "target": "@ui/empty-state.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "error-state",
+      "type": "registry:ui",
+      "title": "ErrorState",
+      "description": "\"Couldn’t load {noun}\", a detail and one soft Retry, in page, inspector and inline sizes; and the ErrorBoundary that renders it.",
+      "dependencies": [
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/empty-state",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/error-state.tsx",
+          "type": "registry:ui",
+          "target": "@ui/error-state.tsx"
+        },
+        {
+          "path": "frontend/src/components/ui/error-boundary.tsx",
+          "type": "registry:ui",
+          "target": "@ui/error-boundary.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "The one owner of the loading shimmer. No spinners.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/skeleton.tsx",
+          "type": "registry:ui",
+          "target": "@ui/skeleton.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "state-mark",
+      "type": "registry:ui",
+      "title": "StateMark",
+      "description": "Health as an 8px mark (6px in dense rows) in the state tokens, always paired with a word for readers.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/state-mark.tsx",
+          "type": "registry:ui",
+          "target": "@ui/state-mark.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "chip",
+      "type": "registry:ui",
+      "title": "Chip",
+      "description": "A status word: `tone`, `soft` for a fill, `mono` for values, and a `hint`.",
+      "dependencies": [
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/hint",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/chip.tsx",
+          "type": "registry:ui",
+          "target": "@ui/chip.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "env-signal",
+      "type": "registry:ui",
+      "title": "EnvSignal",
+      "description": "An environment, named in its own colour family. Never a loud badge.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/env",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/env-signal.tsx",
+          "type": "registry:ui",
+          "target": "@ui/env-signal.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "list-card",
+      "type": "registry:ui",
+      "title": "ListCard",
+      "description": "The one row recipe: a card with a column-label header and hairlines, `ListCard.Surface` rows at 40, 48 or 56px, the solid hover and the one selection mark.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/list-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/list-card.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "panel",
+      "type": "registry:ui",
+      "title": "Panel",
+      "description": "A box of fields: `well`, `card` or `framed`, at rounded-lg.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/panel.tsx",
+          "type": "registry:ui",
+          "target": "@ui/panel.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button, IconButton, CopyButton",
+      "description": "One ink primary, soft secondaries and the consequence tier (glass-amber, glass-rose, glass-emerald, danger) at three heights. Every control that changes something is refused under a view-as lens. `IconButton` names itself through its hint; `CopyButton` is every copy.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "class-variance-authority@^0.7.1",
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/hint",
+        "bkovaluk/devops-platform/identity",
+        "bkovaluk/devops-platform/toast",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/use-copy",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/button.tsx"
+        },
+        {
+          "path": "frontend/src/components/ui/button-variants.ts",
+          "type": "registry:ui",
+          "target": "@ui/button-variants.ts"
+        },
+        {
+          "path": "frontend/src/components/ui/icon-button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/icon-button.tsx"
+        },
+        {
+          "path": "frontend/src/components/ui/copy-button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/copy-button.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input, Textarea, Field",
+      "description": "Text inputs at the control heights, and the labelled field around them.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/input.tsx",
+          "type": "registry:ui",
+          "target": "@ui/input.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "A key or a chord, in mono nano.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/kbd.tsx",
+          "type": "registry:ui",
+          "target": "@ui/kbd.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "The modal on Base UI Dialog: focus trap, Escape, focus return, glass, an entry that settles from 95%.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/dialog.tsx",
+          "type": "registry:ui",
+          "target": "@ui/dialog.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "The side sheet on Base UI Dialog, for create and edit forms.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/dialog",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/sheet.tsx",
+          "type": "registry:ui",
+          "target": "@ui/sheet.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:ui",
+      "title": "SegmentedControl",
+      "description": "A radio group whose one pill is anchored to the checked option, so a new choice slides it across.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/popover",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/segmented-control.tsx",
+          "type": "registry:ui",
+          "target": "@ui/segmented-control.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "Base UI Switch in the tokens.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/switch.tsx",
+          "type": "registry:ui",
+          "target": "@ui/switch.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "toaster",
+      "type": "registry:ui",
+      "title": "Toaster",
+      "description": "The toast viewport on Base UI Toast, and `notifyWithLink` / `notifyFailure`: a toast that links to the resource or the request, and the one way a failure is announced.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/resource-links",
+        "bkovaluk/devops-platform/toast",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/use-copy",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/toaster.tsx",
+          "type": "registry:ui",
+          "target": "@ui/toaster.tsx"
+        },
+        {
+          "path": "frontend/src/components/ui/toast-link-row.tsx",
+          "type": "registry:ui",
+          "target": "@ui/toast-link-row.tsx"
+        },
+        {
+          "path": "frontend/src/lib/notify.ts",
+          "type": "registry:lib",
+          "target": "@lib/notify.ts"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "metric-track",
+      "type": "registry:ui",
+      "title": "MetricTrack and MetricStrip",
+      "description": "The quiet-columns chart: `MetricTrack` for a bar chart, `MetricStrip` for the same columns at row height, `MetricAxis` for a shared clock. Data ink, colour only when a reading went wrong, one tab stop with arrow-key buckets.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/hint",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/metric-track.tsx",
+          "type": "registry:ui",
+          "target": "@ui/metric-track.tsx"
+        },
+        {
+          "path": "frontend/src/components/ui/metric-time.ts",
+          "type": "registry:ui",
+          "target": "@ui/metric-time.ts"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "resource-anchor",
+      "type": "registry:ui",
+      "title": "ResourceAnchor",
+      "description": "A router link to any resource in the ResourceLink vocabulary.",
+      "dependencies": [
+        "@tanstack/react-router@^1.170.45"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/resource-links",
+        "bkovaluk/devops-platform/tokens"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/resource-anchor.tsx",
+          "type": "registry:ui",
+          "target": "@ui/resource-anchor.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:ui",
+      "title": "ThemeToggle",
+      "description": "Dark and light, crossfaded through a view transition.",
+      "dependencies": [
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/hint",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/ui-store",
+        "bkovaluk/devops-platform/view-transition"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/theme-toggle.tsx",
+          "type": "registry:ui",
+          "target": "@ui/theme-toggle.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "command-palette",
+      "type": "registry:ui",
+      "title": "CommandPalette",
+      "description": "The ⌘K palette on cmdk inside a Base UI Dialog: every tool the principal can open, and each tool’s own commands from the registry.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "@tanstack/react-router@^1.170.45",
+        "cmdk@^1.1.1",
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/dialog",
+        "bkovaluk/devops-platform/kbd",
+        "bkovaluk/devops-platform/scopes",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/tool-registry",
+        "bkovaluk/devops-platform/ui-store",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/command-palette.tsx",
+          "type": "registry:ui",
+          "target": "@ui/command-palette.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "message",
+      "type": "registry:ui",
+      "title": "Message",
+      "description": "shadcn’s Message in the tokens: one turn of a conversation, aligned to who said it, with a header, content and footer.",
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/message.tsx",
+          "type": "registry:ui",
+          "target": "@ui/message.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "bubble",
+      "type": "registry:ui",
+      "title": "Bubble",
+      "description": "shadcn’s Bubble in the tokens: `filled` for the person’s words on the accent fill, `plain` for the assistant’s as reading text.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/bubble.tsx",
+          "type": "registry:ui",
+          "target": "@ui/bubble.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "message-scroller",
+      "type": "registry:ui",
+      "title": "MessageScroller",
+      "description": "shadcn’s Message Scroller in the tokens: pinned to the newest turn while an answer streams, let go when the reader scrolls up, with an IconButton back down.",
+      "dependencies": [
+        "@shadcn/react@^0.3.1",
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/components/ui/message-scroller.tsx",
+          "type": "registry:ui",
+          "target": "@ui/message-scroller.tsx"
+        }
+      ],
+      "categories": [
+        "primitives"
+      ]
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:block",
+      "title": "App shell",
+      "description": "The console frame: the chrome (rail and top bar as one L), the inset workspace, the env switcher and banners, view-as, the user menu, Home, the theme toggle and the palette, wired to the router and providers. Installs main.tsx, App.tsx and router.tsx.",
+      "dependencies": [
+        "@base-ui/react@^1.9.0",
+        "@tanstack/react-query@^5.104.5",
+        "@tanstack/react-router@^1.170.45",
+        "lucide-react@^1.60.0",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/approvals",
+        "bkovaluk/devops-platform/assistant",
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/command-palette",
+        "bkovaluk/devops-platform/config",
+        "bkovaluk/devops-platform/dialog",
+        "bkovaluk/devops-platform/empty-state",
+        "bkovaluk/devops-platform/env",
+        "bkovaluk/devops-platform/env-signal",
+        "bkovaluk/devops-platform/error-state",
+        "bkovaluk/devops-platform/example-tool",
+        "bkovaluk/devops-platform/fonts",
+        "bkovaluk/devops-platform/hint",
+        "bkovaluk/devops-platform/identity",
+        "bkovaluk/devops-platform/input",
+        "bkovaluk/devops-platform/kbd",
+        "bkovaluk/devops-platform/menu",
+        "bkovaluk/devops-platform/mock-api",
+        "bkovaluk/devops-platform/panel",
+        "bkovaluk/devops-platform/scopes",
+        "bkovaluk/devops-platform/section-header",
+        "bkovaluk/devops-platform/state-mark",
+        "bkovaluk/devops-platform/theme-toggle",
+        "bkovaluk/devops-platform/toaster",
+        "bkovaluk/devops-platform/tokens",
+        "bkovaluk/devops-platform/tool-registry",
+        "bkovaluk/devops-platform/ui-store",
+        "bkovaluk/devops-platform/utils",
+        "bkovaluk/devops-platform/view-transition"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/main.tsx",
+          "type": "registry:lib",
+          "target": "~/src/main.tsx"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "type": "registry:lib",
+          "target": "~/src/App.tsx"
+        },
+        {
+          "path": "frontend/src/router.tsx",
+          "type": "registry:lib",
+          "target": "~/src/router.tsx"
+        },
+        {
+          "path": "frontend/src/app/AppShell.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/AppShell.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/AppChrome.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/AppChrome.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/EnvBanner.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/EnvBanner.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/EnvSwitcher.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/EnvSwitcher.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/HomePage.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/HomePage.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/NotFound.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/NotFound.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/Sidebar.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/Sidebar.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/SignInPage.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/SignInPage.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/TopBar.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/TopBar.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/UserMenu.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/UserMenu.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/ViewAsBanner.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/ViewAsBanner.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/ViewAsDialog.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/ViewAsDialog.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/ViewHeader.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/ViewHeader.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/use-focused-env.ts",
+          "type": "registry:hook",
+          "target": "~/src/app/layout/use-focused-env.ts"
+        },
+        {
+          "path": "frontend/public/mark.svg",
+          "type": "registry:file",
+          "target": "~/public/mark.svg"
+        }
+      ],
+      "categories": [
+        "blocks"
+      ]
+    },
+    {
+      "name": "tool-registry",
+      "type": "registry:block",
+      "title": "Tool registry",
+      "description": "TOOL_REGISTRY, the one list every surface is built from (rail, Home tiles, palette, routes), `ToolBoundary` in front of every tool view, and the contribution slots a tool fills on shared surfaces.",
+      "dependencies": [
+        "@tanstack/react-router@^1.170.45",
+        "cmdk@^1.1.1",
+        "lucide-react@^1.60.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-types",
+        "bkovaluk/devops-platform/app-shell",
+        "bkovaluk/devops-platform/approvals",
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/empty-state",
+        "bkovaluk/devops-platform/env",
+        "bkovaluk/devops-platform/env-signal",
+        "bkovaluk/devops-platform/example-tool",
+        "bkovaluk/devops-platform/resource-anchor",
+        "bkovaluk/devops-platform/resource-links",
+        "bkovaluk/devops-platform/scopes",
+        "bkovaluk/devops-platform/skeleton",
+        "bkovaluk/devops-platform/theme-constants",
+        "bkovaluk/devops-platform/utils"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/features/tools/tool-registry.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/tool-registry.tsx"
+        },
+        {
+          "path": "frontend/src/features/tools/ToolBoundary.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/ToolBoundary.tsx"
+        },
+        {
+          "path": "frontend/src/features/tools/activity-slot.ts",
+          "type": "registry:block",
+          "target": "~/src/features/tools/activity-slot.ts"
+        },
+        {
+          "path": "frontend/src/features/tools/contribution-slot.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/contribution-slot.tsx"
+        },
+        {
+          "path": "frontend/src/features/tools/home-parts.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/home-parts.tsx"
+        },
+        {
+          "path": "frontend/src/features/tools/palette-parts.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/palette-parts.tsx"
+        },
+        {
+          "path": "frontend/src/features/tools/contributions/index.ts",
+          "type": "registry:block",
+          "target": "~/src/features/tools/contributions/index.ts"
+        },
+        {
+          "path": "frontend/src/features/tools/contributions/approvals.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/contributions/approvals.tsx"
+        },
+        {
+          "path": "frontend/src/features/tools/contributions/flags.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/contributions/flags.tsx"
+        }
+      ],
+      "categories": [
+        "blocks"
+      ]
+    },
+    {
+      "name": "approvals",
+      "type": "registry:block",
+      "title": "Approvals",
+      "description": "The two-person rule: the review inbox, the resource registry each tool adds one entry to, the queue and decision hooks, and `useNeedsApproval`, which an approval-aware action hook asks before submit.",
+      "dependencies": [
+        "@tanstack/react-query@^5.104.5",
+        "@tanstack/react-router@^1.170.45",
+        "lucide-react@^1.60.0",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/api-types",
+        "bkovaluk/devops-platform/app-shell",
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/chip",
+        "bkovaluk/devops-platform/config",
+        "bkovaluk/devops-platform/empty-state",
+        "bkovaluk/devops-platform/env-signal",
+        "bkovaluk/devops-platform/error-state",
+        "bkovaluk/devops-platform/fold",
+        "bkovaluk/devops-platform/identity-bound-mutation",
+        "bkovaluk/devops-platform/input",
+        "bkovaluk/devops-platform/list-card",
+        "bkovaluk/devops-platform/resource-anchor",
+        "bkovaluk/devops-platform/resource-links",
+        "bkovaluk/devops-platform/scopes",
+        "bkovaluk/devops-platform/section-header",
+        "bkovaluk/devops-platform/segmented-control",
+        "bkovaluk/devops-platform/skeleton",
+        "bkovaluk/devops-platform/state-mark",
+        "bkovaluk/devops-platform/theme-constants",
+        "bkovaluk/devops-platform/toast",
+        "bkovaluk/devops-platform/toaster",
+        "bkovaluk/devops-platform/utils",
+        "bkovaluk/devops-platform/view-transition"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/app/approvals/ApprovalsView.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/approvals/ApprovalsView.tsx"
+        },
+        {
+          "path": "frontend/src/components/approvals/ApprovalsInbox.tsx",
+          "type": "registry:component",
+          "target": "@components/approvals/ApprovalsInbox.tsx"
+        },
+        {
+          "path": "frontend/src/components/approvals/resource-registry.tsx",
+          "type": "registry:component",
+          "target": "@components/approvals/resource-registry.tsx"
+        },
+        {
+          "path": "frontend/src/features/approvals/approval-search.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/approvals/approval-search.ts"
+        },
+        {
+          "path": "frontend/src/features/approvals/approval-toast.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/approvals/approval-toast.ts"
+        },
+        {
+          "path": "frontend/src/features/approvals/use-approvals.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/approvals/use-approvals.ts"
+        },
+        {
+          "path": "frontend/src/features/auth/use-needs-approval.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/auth/use-needs-approval.ts"
+        }
+      ],
+      "categories": [
+        "blocks"
+      ]
+    },
+    {
+      "name": "example-tool",
+      "type": "registry:block",
+      "title": "Example tool: feature flags",
+      "description": "The tool to copy from: a list column and a detail pane, validated URL state, a query-key factory, an approval-aware action hook, a create/edit sheet that names its env on submit, a delete confirm, and a MetricStrip with a minute popover.",
+      "dependencies": [
+        "@tanstack/react-query@^5.104.5",
+        "@tanstack/react-router@^1.170.45",
+        "lucide-react@^1.60.0",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/api-types",
+        "bkovaluk/devops-platform/app-shell",
+        "bkovaluk/devops-platform/approvals",
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/chip",
+        "bkovaluk/devops-platform/config",
+        "bkovaluk/devops-platform/dialog",
+        "bkovaluk/devops-platform/empty-state",
+        "bkovaluk/devops-platform/env",
+        "bkovaluk/devops-platform/env-signal",
+        "bkovaluk/devops-platform/error-state",
+        "bkovaluk/devops-platform/fold",
+        "bkovaluk/devops-platform/hint",
+        "bkovaluk/devops-platform/identity-bound-mutation",
+        "bkovaluk/devops-platform/input",
+        "bkovaluk/devops-platform/list-card",
+        "bkovaluk/devops-platform/metric-track",
+        "bkovaluk/devops-platform/panel",
+        "bkovaluk/devops-platform/popover",
+        "bkovaluk/devops-platform/resource-links",
+        "bkovaluk/devops-platform/scopes",
+        "bkovaluk/devops-platform/section-header",
+        "bkovaluk/devops-platform/segmented-control",
+        "bkovaluk/devops-platform/sheet",
+        "bkovaluk/devops-platform/skeleton",
+        "bkovaluk/devops-platform/state-mark",
+        "bkovaluk/devops-platform/switch",
+        "bkovaluk/devops-platform/theme-constants",
+        "bkovaluk/devops-platform/toaster",
+        "bkovaluk/devops-platform/utils",
+        "bkovaluk/devops-platform/view-transition"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/app/flags/FlagsView.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/flags/FlagsView.tsx"
+        },
+        {
+          "path": "frontend/src/app/flags/FlagDetail.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/flags/FlagDetail.tsx"
+        },
+        {
+          "path": "frontend/src/app/flags/FlagIdle.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/flags/FlagIdle.tsx"
+        },
+        {
+          "path": "frontend/src/app/flags/FlagSheet.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/flags/FlagSheet.tsx"
+        },
+        {
+          "path": "frontend/src/app/flags/DeleteFlagDialog.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/flags/DeleteFlagDialog.tsx"
+        },
+        {
+          "path": "frontend/src/app/flags/EvaluationStrip.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/flags/EvaluationStrip.tsx"
+        },
+        {
+          "path": "frontend/src/app/flags/MinutePopover.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/flags/MinutePopover.tsx"
+        },
+        {
+          "path": "frontend/src/app/flags/flag-words.ts",
+          "type": "registry:block",
+          "target": "~/src/app/flags/flag-words.ts"
+        },
+        {
+          "path": "frontend/src/features/flags/flags-api.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/flags/flags-api.ts"
+        },
+        {
+          "path": "frontend/src/features/flags/use-flags.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/flags/use-flags.ts"
+        },
+        {
+          "path": "frontend/src/features/flags/use-flag-actions.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/flags/use-flag-actions.ts"
+        },
+        {
+          "path": "frontend/src/features/flags/flag-search.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/flags/flag-search.ts"
+        },
+        {
+          "path": "frontend/src/features/flags/flag-toast.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/flags/flag-toast.ts"
+        },
+        {
+          "path": "frontend/src/features/flags/evaluations.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/flags/evaluations.ts"
+        }
+      ],
+      "categories": [
+        "blocks"
+      ]
+    },
+    {
+      "name": "assistant",
+      "type": "registry:block",
+      "title": "Assistant",
+      "description": "The assistant dock: a right panel that talks to POST /api/agent over AG-UI with the official client, streams answers with a quiet row per read, shows each proposed write as a card with its diff to confirm or cancel (an amber request for approval outside the direct envs), and keeps one thread per tab. Offered only when GET /api/agent/status says enabled.",
+      "dependencies": [
+        "@ag-ui/client@^1.0.3",
+        "@tanstack/react-query@^5.104.5",
+        "lucide-react@^1.60.0",
+        "zustand@^5.0.15"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/api-types",
+        "bkovaluk/devops-platform/approvals",
+        "bkovaluk/devops-platform/bubble",
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/chip",
+        "bkovaluk/devops-platform/empty-state",
+        "bkovaluk/devops-platform/env-signal",
+        "bkovaluk/devops-platform/error-state",
+        "bkovaluk/devops-platform/fold",
+        "bkovaluk/devops-platform/identity",
+        "bkovaluk/devops-platform/message",
+        "bkovaluk/devops-platform/message-scroller",
+        "bkovaluk/devops-platform/panel",
+        "bkovaluk/devops-platform/resource-anchor",
+        "bkovaluk/devops-platform/resource-links",
+        "bkovaluk/devops-platform/scopes",
+        "bkovaluk/devops-platform/skeleton",
+        "bkovaluk/devops-platform/toast",
+        "bkovaluk/devops-platform/toaster",
+        "bkovaluk/devops-platform/ui-store"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/app/layout/AssistantDock.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/AssistantDock.tsx"
+        },
+        {
+          "path": "frontend/src/app/assistant/AssistantPanel.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/assistant/AssistantPanel.tsx"
+        },
+        {
+          "path": "frontend/src/app/assistant/AssistantThread.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/assistant/AssistantThread.tsx"
+        },
+        {
+          "path": "frontend/src/app/assistant/AssistantComposer.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/assistant/AssistantComposer.tsx"
+        },
+        {
+          "path": "frontend/src/app/assistant/ToolCallRow.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/assistant/ToolCallRow.tsx"
+        },
+        {
+          "path": "frontend/src/app/assistant/ProposalCard.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/assistant/ProposalCard.tsx"
+        },
+        {
+          "path": "frontend/src/features/assistant/agent-client.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/assistant/agent-client.ts"
+        },
+        {
+          "path": "frontend/src/features/assistant/assistant-runtime.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/assistant/assistant-runtime.ts"
+        },
+        {
+          "path": "frontend/src/features/assistant/assistant-store.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/assistant/assistant-store.ts"
+        },
+        {
+          "path": "frontend/src/features/assistant/assistant-toast.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/assistant/assistant-toast.ts"
+        },
+        {
+          "path": "frontend/src/features/assistant/proposal.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/assistant/proposal.ts"
+        },
+        {
+          "path": "frontend/src/features/assistant/thread-view.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/assistant/thread-view.ts"
+        },
+        {
+          "path": "frontend/src/features/assistant/use-agent-status.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/assistant/use-agent-status.ts"
+        }
+      ],
+      "categories": [
+        "blocks"
+      ]
+    },
+    {
+      "name": "mock-api",
+      "type": "registry:lib",
+      "title": "Mock API",
+      "description": "MSW mode: the API contract answered in the browser, with seeded principals and a scripted assistant, so the console runs with no backend (`?msw=1&as=admin|editor|reviewer|viewer|empty`, `?assistant=off`).",
+      "dependencies": [
+        "msw@^3.0.3"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-types",
+        "bkovaluk/devops-platform/identity",
+        "bkovaluk/devops-platform/scopes"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/test/msw/principal.ts",
+          "type": "registry:lib",
+          "target": "~/src/test/msw/principal.ts"
+        },
+        {
+          "path": "frontend/src/test/msw/init-browser.ts",
+          "type": "registry:lib",
+          "target": "~/src/test/msw/init-browser.ts"
+        },
+        {
+          "path": "frontend/src/test/msw/browser.ts",
+          "type": "registry:lib",
+          "target": "~/src/test/msw/browser.ts"
+        },
+        {
+          "path": "frontend/src/test/msw/handlers.ts",
+          "type": "registry:lib",
+          "target": "~/src/test/msw/handlers.ts"
+        },
+        {
+          "path": "frontend/src/test/msw/agent.ts",
+          "type": "registry:lib",
+          "target": "~/src/test/msw/agent.ts"
+        },
+        {
+          "path": "frontend/src/test/msw/db.ts",
+          "type": "registry:lib",
+          "target": "~/src/test/msw/db.ts"
+        },
+        {
+          "path": "frontend/public/mockServiceWorker.js",
+          "type": "registry:file",
+          "target": "~/public/mockServiceWorker.js"
+        }
+      ],
+      "categories": [
+        "blocks"
+      ]
+    },
+    {
+      "name": "design-doc",
+      "type": "registry:file",
+      "title": "DESIGN.md",
+      "description": "The visual and interaction language, and the eight component standards.",
+      "files": [
+        {
+          "path": "frontend/DESIGN.md",
+          "type": "registry:file",
+          "target": "~/DESIGN.md"
+        }
+      ],
+      "categories": [
+        "docs"
+      ]
+    },
+    {
+      "name": "standards-tests",
+      "type": "registry:file",
+      "title": "Standards ratchets",
+      "description": "The tests that hold the eight standards: each scans src/ for a shape that breaks one and fails the build on it. They import from vite-plus/test.",
+      "devDependencies": [
+        "vite-plus@^1.3.0"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/button"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/app/fold-affordances.test.ts",
+          "type": "registry:file",
+          "target": "~/src/app/fold-affordances.test.ts"
+        },
+        {
+          "path": "frontend/src/app/row-status-affordances.test.ts",
+          "type": "registry:file",
+          "target": "~/src/app/row-status-affordances.test.ts"
+        },
+        {
+          "path": "frontend/src/app/control-affordances.test.ts",
+          "type": "registry:file",
+          "target": "~/src/app/control-affordances.test.ts"
+        },
+        {
+          "path": "frontend/src/app/scale-affordances.test.ts",
+          "type": "registry:file",
+          "target": "~/src/app/scale-affordances.test.ts"
+        },
+        {
+          "path": "frontend/src/app/hint-affordances.test.ts",
+          "type": "registry:file",
+          "target": "~/src/app/hint-affordances.test.ts"
+        },
+        {
+          "path": "frontend/src/app/mutation-affordances.test.ts",
+          "type": "registry:file",
+          "target": "~/src/app/mutation-affordances.test.ts"
+        },
+        {
+          "path": "frontend/src/test/source-scan.ts",
+          "type": "registry:file",
+          "target": "~/src/test/source-scan.ts"
+        }
+      ],
+      "categories": [
+        "docs"
+      ]
+    },
+    {
+      "name": "agent-rules",
+      "type": "registry:item",
+      "title": "Agent skills",
+      "description": "The Claude Code skills that teach a coding agent to build on this framework: add a tool, gate an action behind approvals, expose an action to AI, change the API contract, hold the design standards, and sweep the UI with screenshots. Installs into .claude/skills/.",
+      "files": [
+        {
+          "path": ".claude/skills/add-tool/SKILL.md",
+          "type": "registry:file",
+          "target": "~/.claude/skills/add-tool/SKILL.md"
+        },
+        {
+          "path": ".claude/skills/add-approval-action/SKILL.md",
+          "type": "registry:file",
+          "target": "~/.claude/skills/add-approval-action/SKILL.md"
+        },
+        {
+          "path": ".claude/skills/ai-actions/SKILL.md",
+          "type": "registry:file",
+          "target": "~/.claude/skills/ai-actions/SKILL.md"
+        },
+        {
+          "path": ".claude/skills/api-contract/SKILL.md",
+          "type": "registry:file",
+          "target": "~/.claude/skills/api-contract/SKILL.md"
+        },
+        {
+          "path": ".claude/skills/design-standards/SKILL.md",
+          "type": "registry:file",
+          "target": "~/.claude/skills/design-standards/SKILL.md"
+        },
+        {
+          "path": ".claude/skills/screenshot-sweep/SKILL.md",
+          "type": "registry:file",
+          "target": "~/.claude/skills/screenshot-sweep/SKILL.md"
+        }
+      ],
+      "categories": [
+        "agent"
+      ]
+    }
+  ]
+}
