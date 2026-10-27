@@ -63,13 +63,38 @@ request like any other.
   <img alt="The assistant after the change was confirmed and filed as an approval request" src="docs/screens/assistant-confirmed-dark.png">
 </picture>
 
+**Investigations.** What an alarm-investigating DevOps agent concluded about
+each alarm, for a person to review: the cause and its impact, the facts it
+verified, the next steps only a person can take, the hypotheses it weighed and
+a notebook of every call it made. A reviewer acknowledges a finding or closes
+it with a verdict on how the agent did.
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/screens/investigation-detail-light.png">
+  <img alt="An investigation in prod: the open queue beside the finding, its facts, cause, verified facts and the decision bar" src="docs/screens/investigation-detail-dark.png">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/screens/investigation-hypothesis-focus-light.png">
+  <img alt="A hypothesis in focus: the notebook dims every call that did not test it" src="docs/screens/investigation-hypothesis-focus-dark.png">
+</picture>
+
+**The environment.** The top bar says where you are as a path, and the
+environment is a crumb of its own in its own colour; pressing it picks another.
+A 3px line along the top of the window carries the same colour.
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="docs/screens/env-breadcrumb-menu-light.png">
+  <img alt="The environment crumb open over the investigations list in prod, with every environment listed" src="docs/screens/env-breadcrumb-menu-dark.png">
+</picture>
+
 The screens are taken by `frontend/scripts/screenshots/sweep.ts` in MSW mode
 (`PASSES=scenes OUT=../docs/screens bun run screenshots`).
 
 ## Quick start
 
 Backend, in dev mode (every request is `ada@example.com`, an admin; an
-in-memory store seeded with example flags and pending requests):
+in-memory store seeded with example flags, pending requests and findings):
 
 ```bash
 cd backend
@@ -114,6 +139,51 @@ a model, a scope or a role is one change across all of them.
 - `frontend/README.md`: scripts, stack, MSW mode, the registry.
 - `frontend/DESIGN.md`: the visual language and the eight component standards
   the tests enforce.
+
+## Investigations
+
+The second tool is the review side of an alarm-investigating DevOps agent: an
+agent that investigates each CloudWatch alarm or Datadog monitor when it fires,
+using read-only tools, and records a structured finding in a DynamoDB table in
+each environment. The console reads those findings and writes only their review
+fields, so a person can work through them:
+
+- the list shows one review state (open, acknowledged, closed) over a window,
+  with search, facets (severity, outcome, confidence, effort, resource type,
+  kind, tool used, model, and on the closed tab resolution and reviewer), and
+  the findings triage recorded without investigating only when asked;
+- a finding shows the agent's cause and impact, the facts it verified, the next
+  steps only a person can take (commands to copy, never run), the hypotheses it
+  weighed, and a notebook of every call it made with what it read off each one;
+- acknowledging says somebody is looking at it; closing records a verdict:
+  `confirmed` or `false_positive` (the agent learns from both on its next
+  investigation of the resource), `wrong` (needs a note; used only for evals)
+  or `dismissed` (for a finding that reported no cause).
+
+A review is a verdict on the agent's own record and changes nothing the
+finding is about, so it applies at once in every environment and never becomes
+an approval request. Closing keeps the finding, and its eval snapshot, for a
+year; acknowledging keeps it 90 days, as the agent's retention contract says.
+Reading takes `findings:read` and reviewing `findings:review`, per environment.
+Keys: `j` and `k` walk the list, `/` searches, `a` acknowledges, `c` closes,
+`h` steps through the hypotheses, `?` lists them.
+
+## Environments in the URL
+
+The environment is part of every link: the shell's `env` search parameter on a
+list (absent means every environment the person can read), or the env in the
+path of a single item (`/flags/staging/checkout-v2`,
+`/investigations/prod/f-checkout-0001`). The top bar names it as a breadcrumb,
+`App / environment / Tool`, and a line along the top of the window takes its
+colour. Only the person changes it, from the breadcrumb or with ⌥0 (every env)
+and ⌥1 onwards; nothing switches it for them. Every environment stays in the
+menu: one the open tool cannot show, or one the person cannot read there, is
+greyed with the reason, never hidden. On a flag's page another environment opens
+the same flag there; on an investigation it returns to the list in the
+environment picked. Tools tied to no environment (Home, Approvals) say so in a
+crumb that cannot be pressed. The strip saying "writes require approval" shows
+for the tools whose writes become approval requests, in the environment on
+screen.
 
 ## Use it in your own app
 

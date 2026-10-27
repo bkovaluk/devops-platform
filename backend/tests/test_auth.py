@@ -130,7 +130,13 @@ def test_me_lists_scopes(client: TestClient) -> None:
     assert me == {
         "email": "lead@example.com",
         "name": "lead",
-        "scopes": ["flags:read", "flags:write", "approvals:review"],
+        "scopes": [
+            "flags:read",
+            "flags:write",
+            "findings:read",
+            "findings:review",
+            "approvals:review",
+        ],
         "is_admin": False,
         "view_as": None,
     }
@@ -138,7 +144,7 @@ def test_me_lists_scopes(client: TestClient) -> None:
 
 def test_unlisted_users_hold_the_default_roles(client: TestClient) -> None:
     me = client.get("/auth/me", headers=as_user("stranger@example.com")).json()
-    assert me["scopes"] == ["flags:read"]
+    assert me["scopes"] == ["flags:read", "findings:read"]
 
 
 def test_bearer_scheme_is_required(client: TestClient) -> None:
@@ -153,7 +159,7 @@ class TestViewAs:
         assert me == {
             "email": "viewer@example.com",
             "name": "viewer",
-            "scopes": ["flags:read"],
+            "scopes": ["flags:read", "findings:read"],
             "is_admin": False,
             "view_as": "viewer@example.com",
         }

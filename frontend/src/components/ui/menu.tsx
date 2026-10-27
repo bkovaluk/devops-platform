@@ -173,19 +173,24 @@ interface MenuItemProps {
   onSelect: () => void
   /** Makes the item one of a set of choices, checked or not. */
   checked?: boolean
+  /** Greyed and inert, but still in the menu and reachable, so the reason it
+   *  carries can be read. */
+  disabled?: boolean
   className?: string
   children: React.ReactNode
 }
 
-export function MenuItem({ onSelect, checked, className, children }: MenuItemProps) {
+export function MenuItem({ onSelect, checked, disabled, className, children }: MenuItemProps) {
   const close = React.useContext(CloseMenu)
   return (
     <button
       type="button"
       role={checked === undefined ? 'menuitem' : 'menuitemradio'}
       aria-checked={checked}
+      aria-disabled={disabled || undefined}
       tabIndex={-1}
       onClick={() => {
+        if (disabled) return
         close()
         onSelect()
       }}
@@ -195,6 +200,7 @@ export function MenuItem({ onSelect, checked, className, children }: MenuItemPro
       }}
       className={cn(
         'flex w-full cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-left text-xs text-foreground outline-none hover:bg-accent focus:bg-accent',
+        'aria-disabled:cursor-not-allowed aria-disabled:text-dim-foreground',
         className,
       )}
     >

@@ -15,7 +15,7 @@ describe('the scope contract', () => {
   it('declares exactly the tools and actions the UI types', () => {
     // A tool or action added upstream fails here until the unions in
     // permissions.ts name it too.
-    expect([...ALL_TOOLS].sort()).toEqual(['approvals', 'flags'])
+    expect([...ALL_TOOLS].sort()).toEqual(['approvals', 'findings', 'flags'])
     expect([...new Set(Object.values(CONTRACT.tools).flat())].sort()).toEqual([
       'read',
       'review',

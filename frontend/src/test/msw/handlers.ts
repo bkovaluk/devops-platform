@@ -9,7 +9,16 @@
 import { delay, HttpResponse, http } from 'msw'
 import { type Action, ALL_TOOLS, can, inEnv, type Tool } from '@/features/auth/permissions'
 import { VIEW_AS_HEADER } from '@/features/auth/view-as'
-import type { AgentStatus, Approval, AuthMe, Flag, FlagChange } from '@/types/api'
+import type {
+  AgentStatus,
+  Approval,
+  AuthMe,
+  FindingDetail,
+  FindingStatus,
+  FindingWindow,
+  Flag,
+  FlagChange,
+} from '@/types/api'
 import {
   type AgentEvent,
   type AgentWorld,
@@ -19,6 +28,7 @@ import {
   type RunInput,
 } from './agent'
 import { db, evaluationsFor, MOCK_CONFIG, nextApprovalId, withExpiry } from './db'
+import { listFindings } from './findings'
 import { grantsFor, mockPrincipal, personByEmail, personFor } from './principal'
 
 let latencyMs = 0
@@ -250,6 +260,72 @@ function isRunInput(body: Record<string, unknown>): body is Record<string, unkno
   )
 }
 
+const FINDING_STATUSES: readonly FindingStatus[] = ['open', 'acknowledged', 'closed']
+const FINDING_WINDOWS: readonly FindingWindow[] = ['24h', '7d', '30d', '90d', '365d']
+const FINDING_FACETS = [
+  'severity',
+  'outcome',
+  'effort',
+  'confidence',
+  'type',
+  'kind',
+  'tool',
+  'model',
+  'resolution',
+  'resolved_by',
+] as const
+const RESOLUTIONS = ['confirmed', 'false_positive', 'wrong', 'dismissed'] as const
+const GRADES: readonly string[] = ['confirmed', 'false_positive', 'wrong']
+
+function findFinding(id: string, env: string): FindingDetail | undefined {
+  return db.findings.find((item) => item.finding_id === id && item.env === env)
+}
+
+function isReported(item: FindingDetail): boolean {
+  return item.outcome === null || item.outcome === undefined || item.outcome === 'reported'
+}
+
+/** Close a finding with a verdict, on the API's terms; the refusal when it may not. */
+function closeFinding(
+  item: FindingDetail,
+  body: Record<string, unknown>,
+  caller: Caller,
+): Response | null {
+  const resolution = body.resolution
+  if (!RESOLUTIONS.includes(resolution as (typeof RESOLUTIONS)[number])) {
+    return refuse(422, 'resolution: Input should be a resolution.')
+  }
+  const note = typeof body.note === 'string' && body.note.trim() ? body.note.trim() : null
+  if (resolution === 'wrong' && !note)
+    return refuse(422, "'wrong' needs a note saying what was wrong.")
+  if (item.status === 'closed') {
+    return refuse(
+      409,
+      `Finding ${item.finding_id} is already closed by ${item.resolved_by ?? 'someone else'}.`,
+    )
+  }
+  if (GRADES.includes(resolution as string) && !isReported(item)) {
+    return refuse(
+      409,
+      `Finding ${item.finding_id} reported no cause (${item.outcome}), so there is nothing to grade as ${String(resolution)}; close it as dismissed.`,
+    )
+  }
+  if (resolution === 'dismissed' && isReported(item)) {
+    return refuse(
+      409,
+      `Finding ${item.finding_id} reported a cause; close it as confirmed, false_positive or wrong.`,
+    )
+  }
+  Object.assign(item, {
+    status: 'closed',
+    resolution,
+    resolution_note: note,
+    resolved_by: caller.email,
+    resolved_at: new Date().toISOString(),
+  })
+  return null
+}
+
 export const handlers = [
   http.get('*/health', () => HttpResponse.json({ status: 'ok' })),
 
@@ -380,6 +456,84 @@ export const handlers = [
     applyChange('delete', env, key, {}, caller.email)
     const result: FlagChange = { applied: true, flag: existing }
     return HttpResponse.json(result)
+  }),
+
+  http.get('*/api/findings', async ({ request }) => {
+    await pause()
+    const env = envOf(request, { allowAll: true })
+    if (env instanceof Response) return env
+    const caller = callerOf(request)
+    if (caller instanceof Response) return caller
+    const readable = MOCK_CONFIG.environments.filter((name) =>
+      can(caller.scopes, inEnv('findings', 'read', name)),
+    )
+    if (env === 'all' && readable.length === 0) {
+      return refuse(403, 'You need findings:read in at least one environment to list these.')
+    }
+    if (env !== 'all' && !readable.includes(env)) {
+      return refuse(403, `You need findings:read in ${env}.`)
+    }
+    const search = new URL(request.url).searchParams
+    const status = (search.get('status') ?? 'open') as FindingStatus
+    const window = (search.get('window') ?? '30d') as FindingWindow
+    if (!FINDING_STATUSES.includes(status)) return refuse(422, 'status: Input should be a status.')
+    if (!FINDING_WINDOWS.includes(window)) return refuse(422, 'window: Input should be a window.')
+    if (window === '365d' && status !== 'closed') {
+      return refuse(400, 'The 365d window is for closed findings; pick a shorter one.')
+    }
+    return HttpResponse.json(
+      listFindings(db.findings, {
+        envs: env === 'all' ? readable : [env],
+        selector: env,
+        status,
+        window,
+        triage: search.get('triage') === 'true',
+        filters: Object.fromEntries(FINDING_FACETS.map((key) => [key, search.getAll(key)])),
+        q: search.get('q') ?? '',
+        offset: Number(search.get('offset') ?? 0),
+        limit: Number(search.get('limit') ?? 100),
+      }),
+    )
+  }),
+
+  http.get('*/api/findings/:id', async ({ request, params }) => {
+    await pause()
+    const env = envOf(request, { allowAll: false })
+    if (env instanceof Response) return env
+    const caller = authorizeIn(request, 'findings', 'read', env)
+    if (caller instanceof Response) return caller
+    const item = findFinding(String(params.id), env)
+    return item
+      ? HttpResponse.json(item)
+      : refuse(404, `No finding ${String(params.id)} in ${env}; it may have expired.`)
+  }),
+
+  http.post('*/api/findings/:id/:verb', async ({ request, params }) => {
+    await pause()
+    const verb = String(params.verb)
+    if (!['acknowledge', 'close'].includes(verb)) return refuse(404, 'No such action.')
+    const env = envOf(request, { allowAll: false })
+    if (env instanceof Response) return env
+    const caller = authorizeIn(request, 'findings', 'review', env)
+    if (caller instanceof Response) return caller
+    const item = findFinding(String(params.id), env)
+    if (!item) return refuse(404, `No finding ${String(params.id)} in ${env}; it may have expired.`)
+    if (verb === 'acknowledge') {
+      if (item.status !== 'open') {
+        return refuse(
+          409,
+          `Finding ${item.finding_id} is ${item.status}; only an open finding can be acknowledged.`,
+        )
+      }
+      Object.assign(item, {
+        status: 'acknowledged',
+        acknowledged_by: caller.email,
+        acknowledged_at: new Date().toISOString(),
+      })
+      return HttpResponse.json(item)
+    }
+    const refused = closeFinding(item, await jsonBody(request), caller)
+    return refused ?? HttpResponse.json(item)
   }),
 
   http.get('*/api/agent/status', async ({ request }) => {

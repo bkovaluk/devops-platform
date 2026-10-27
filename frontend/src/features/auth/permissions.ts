@@ -46,7 +46,7 @@ export const CONTRACT: ScopeContract = contract
 export const ADMIN_SCOPE = '*'
 
 /** Every tool the API grants against. */
-export type Tool = 'flags' | 'approvals'
+export type Tool = 'flags' | 'approvals' | 'findings'
 
 export type Action = 'read' | 'write' | 'review'
 

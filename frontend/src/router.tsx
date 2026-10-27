@@ -21,6 +21,7 @@ import { z } from 'zod'
 import { AppShell } from '@/app/AppShell'
 import { NotFound } from '@/app/layout/NotFound'
 import { approvalsSearchSchema } from '@/features/approvals/approval-search'
+import { findingSearchSchema, findingsSearchSchema } from '@/features/findings/findings-search'
 import { flagSearchSchema, flagsSearchSchema } from '@/features/flags/flag-search'
 import { TOOL_REGISTRY } from '@/features/tools/tool-registry'
 import { ToolBoundary } from '@/features/tools/ToolBoundary'
@@ -71,10 +72,34 @@ const flagRoute = createRoute({
   component: lazyRouteComponent(() => import('@/app/flags/FlagDetail'), 'FlagDetail'),
 })
 
+const investigationsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: 'investigations',
+  validateSearch: findingsSearchSchema,
+  component: () => <ToolBoundary tool={TOOL_REGISTRY.investigations} />,
+})
+
+const investigationsIndexRoute = createRoute({
+  getParentRoute: () => investigationsRoute,
+  path: '/',
+  component: lazyRouteComponent(() => import('@/app/investigations/FindingIdle'), 'FindingIdle'),
+})
+
+const findingRoute = createRoute({
+  getParentRoute: () => investigationsRoute,
+  path: '$env/$findingId',
+  validateSearch: findingSearchSchema,
+  component: lazyRouteComponent(
+    () => import('@/app/investigations/FindingDetail'),
+    'FindingDetail',
+  ),
+})
+
 export const routeTree = rootRoute.addChildren([
   homeRoute,
   approvalsRoute,
   flagsRoute.addChildren([flagsIndexRoute, flagRoute]),
+  investigationsRoute.addChildren([investigationsIndexRoute, findingRoute]),
 ])
 
 export function createAppRouter(client: QueryClient, history?: RouterHistory) {

@@ -77,6 +77,80 @@ Approval { id: string, env: string, tool: "flags", action: "create"|"update"|"de
 - `POST /api/approvals/{id}/withdraw` (requester only)
 - A pending request older than `APPROVAL_TTL_HOURS` (default 72) reads as `expired`.
 
+## Investigations: the DevOps agent's findings
+
+An alarm-investigating DevOps agent writes one finding per investigation to a DynamoDB
+table in each environment (`FINDINGS_TABLES`, read through that env's `AWS_ROLE_ARNS`
+role). The API reads them and writes only their review fields. Every field the agent may
+not have written is optional, so an older item reads with the contract's defaults.
+
+```
+FindingRow { finding_id: string, env: string, created_at: string,
+             status: "open"|"acknowledged"|"closed", source: string|null,
+             severity: string|null, title: string|null, alarm_name: string|null,
+             resource_key: string|null, resource_type: string|null, resource_name: string|null,
+             kind: string, outcome: "reported"|"incomplete"|"triaged"|null,
+             fix_effort: string|null, confidence: "high"|"medium"|"low"|null,
+             recurrence_count: integer, linked_count: integer, alarm_count: integer|null,
+             tool_call_count: integer|null, tools_used: string[]|null, model: string|null,
+             steps: integer|null, error_signature: string|null,
+             resolution: "confirmed"|"false_positive"|"wrong"|"dismissed"|null,
+             resolved_by: string|null, resolved_at: string|null, acknowledged_by: string|null }
+
+FindingDetail = FindingRow & {
+  summary, likely_cause, confidence_reason, fix_effort_reason, severity_floor,
+  proposed_severity, alarm_arn, alarm_reason, alarm_time, account_id, region,
+  resolution_note, acknowledged_at, last_seen_at, incident_id, linked_to,
+  previous_finding_id: string|null,
+  hypotheses: { text, state: "likely"|"ruled_out"|"unverified", steps: integer[] }[],
+  evidence: { kind, detail, steps: integer[] }[],
+  checked: { text, steps: integer[] }[],
+  actions: { kind: "change"|"code"|"read"|"approval", text, detail, command }[],
+  suggested_actions: string[],
+  tool_trail: { step, tool, status: "data"|"empty"|"error", input, args,
+                call: { provider, service, action, label, subject,
+                        kind: "evidence"|"lookup", refused }|null }[],
+  run: { stop_reason, turns, max_turns, duration_seconds, weighted_tokens, token_budget }|null,
+  tokens_used: integer|null, context_summary: { sections, counts, chars, truncated }|null,
+  sources_with_data, prior_finding_ids, linked_alarms, member_alarms: string[],
+  history: { finding_id, created_at, title, status, resolution, outcome }[] }
+```
+
+`resource_type` and `resource_name` are read off the resource key (its CloudWatch namespace
+without `AWS/`, and the dimension value); `model` is the model id shortened (`opus-5.5`);
+`history` is up to five earlier findings on the same resource, newest first. What a call
+returned is never stored, so a trail step carries its input only.
+
+- `GET /api/findings?env=all|<env>&status=open|acknowledged|closed&window=24h|7d|30d|90d|365d`
+  returns `FindingList { env, status, window, items: FindingRow[], total, facets, truncated }`
+  - more keys narrow it, any value of a key matching: `severity`, `outcome`, `effort`,
+    `confidence`, `type`, `kind` (also `has_linked`, `repeating`), `tool`, `model`,
+    `resolution`, `resolved_by`, each repeatable, and `q` (title, alarm, resource or error
+    signature, at most 200 characters)
+  - `triage=true` includes the findings the agent's triage wrote without investigating
+    (`skipped`, `deferred`, `linked`, `grouped`, `storm`); without it a kind filter for one
+    of them admits that kind alone
+  - `items` is newest first, one page of `limit` (default 100, at most 200) from `offset`;
+    `total` counts every match; `facets` counts the window, status and triage rule before
+    any other narrowing (`{facet: {value: count}}`); `truncated` says an environment held
+    more than one read takes (5,000)
+  - `window=365d` is for `status=closed`; any other status is a 400
+- `GET /api/findings/{finding_id}?env=<env>` returns `FindingDetail` (404 when missing)
+- `POST /api/findings/{finding_id}/acknowledge?env=<env>` marks an open finding
+  `acknowledged` with `acknowledged_at` and `acknowledged_by`, keeps it 90 days, and returns
+  `FindingDetail`; 409 when it is not open
+- `POST /api/findings/{finding_id}/close?env=<env>` body `{resolution, note?}` closes it with
+  `resolution`, `resolution_note`, `resolved_at` and `resolved_by`, keeps it and its eval
+  snapshot 365 days, and returns `FindingDetail`
+  - `confirmed`, `false_positive` and `wrong` grade a reported cause (a finding without an
+    `outcome` counts as reported); `dismissed` is for one that reported none; anything else
+    is a 409
+  - `wrong` needs a note (422); a note is at most 500 characters after trimming
+  - 409 when it is already closed, naming who closed it
+- Reads take `findings:read` in the env; reviews take `findings:review`. A review is a
+  verdict on the agent's record and changes nothing the finding is about, so it applies at
+  once in every environment and is never filed as an approval request.
+
 ## Health
 
 `GET /health` returns `{"status": "ok"}` (no auth).

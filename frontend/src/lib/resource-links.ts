@@ -9,6 +9,8 @@ export type ResourceLink =
   | { kind: 'flag'; key: string; env: string }
   | { kind: 'flags'; env: string }
   | { kind: 'approval'; id: string }
+  | { kind: 'finding'; id: string; env: string }
+  | { kind: 'findings'; env: string }
 
 /** The path and search a link opens, relative to the app's origin. */
 export function resourcePath(resource: ResourceLink): string {
@@ -19,6 +21,10 @@ export function resourcePath(resource: ResourceLink): string {
       return `/flags?env=${encodeURIComponent(resource.env)}`
     case 'approval':
       return `/approvals?status=all&id=${encodeURIComponent(resource.id)}`
+    case 'finding':
+      return `/investigations/${encodeURIComponent(resource.env)}/${encodeURIComponent(resource.id)}`
+    case 'findings':
+      return `/investigations?env=${encodeURIComponent(resource.env)}`
   }
 }
 

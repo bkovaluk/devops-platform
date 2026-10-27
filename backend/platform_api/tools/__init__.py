@@ -12,8 +12,8 @@ from typing import Final
 from fastapi import FastAPI
 
 from platform_api.context import Platform
-from platform_api.tools import flags
+from platform_api.tools import findings, flags
 
 type Installer = Callable[[FastAPI, Platform], None]
 
-INSTALLERS: Final[tuple[Installer, ...]] = (flags.install,)
+INSTALLERS: Final[tuple[Installer, ...]] = (flags.install, findings.install)

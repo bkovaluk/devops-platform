@@ -3,14 +3,15 @@ import { IconButton } from '@/components/ui/icon-button'
 import { Kbd } from '@/components/ui/kbd'
 import { useAssistantAvailable } from '@/features/assistant/use-agent-status'
 import { useConfig } from '@/features/config/use-config'
+import type { ToolDefinition } from '@/features/tools/tool-registry'
 import { cn } from '@/lib/utils'
 import { useUIStore } from '@/stores/ui-store'
 import { ASSISTANT_DOCK_ID, ASSISTANT_TOGGLE_ID } from './AssistantDock'
-import { EnvSwitcher } from './EnvSwitcher'
+import { EnvBreadcrumb } from './EnvBreadcrumb'
 import { MobileNav } from './Sidebar'
 import { UserMenu } from './UserMenu'
 
-export function TopBar() {
+export function TopBar({ tool }: { tool: ToolDefinition }) {
   const setMobileNavOpen = useUIStore((state) => state.setMobileNavOpen)
   const assistantOpen = useUIStore((state) => state.assistantOpen)
   const setAssistantOpen = useUIStore((state) => state.setAssistantOpen)
@@ -25,7 +26,7 @@ export function TopBar() {
         onClick={() => setMobileNavOpen(true)}
       />
       <MobileNav appName={appName} />
-      <EnvSwitcher />
+      <EnvBreadcrumb tool={tool} />
       <div className="flex-1" />
       <button
         type="button"

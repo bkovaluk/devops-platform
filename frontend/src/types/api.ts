@@ -33,3 +33,26 @@ export type FlagChange = Schemas['FlagApplied'] | Schemas['ApprovalQueued']
 
 /** `GET /api/agent/status` — whether this deployment runs an assistant. */
 export type AgentStatus = Schemas['AgentStatus']
+
+/** `GET /api/findings`: one page of the DevOps agent's findings, with facet counts. */
+export type FindingList = Schemas['FindingList']
+export type FindingRow = Schemas['FindingRow']
+export type FindingDetail = Schemas['FindingDetail']
+export type FindingFacets = Schemas['FindingFacets']
+export type FindingStatus = Schemas['FindingStatus']
+export type FindingWindow = Schemas['FindingWindow']
+export type FindingAction = Schemas['FindingAction']
+export type FindingHistoryEntry = Schemas['FindingHistoryEntry']
+export type ActionKind = Schemas['ActionKind']
+export type Resolution = Schemas['Resolution']
+export type Confidence = Schemas['Confidence']
+export type Hypothesis = Schemas['Hypothesis']
+export type HypothesisState = Schemas['HypothesisState']
+export type Evidence = Schemas['Evidence']
+export type CheckedFact = Schemas['CheckedFact']
+export type ToolTrailStep = Schemas['ToolTrailStep']
+export type ToolCall = Schemas['ToolCall']
+export type RunSummary = Schemas['RunSummary']
+
+/** The body of `POST /api/findings/{id}/close`. */
+export type ResolveFindingBody = Schemas['ResolveFindingBody']

@@ -1037,7 +1037,7 @@
       "name": "app-shell",
       "type": "registry:block",
       "title": "App shell",
-      "description": "The console frame: the chrome (rail and top bar as one L), the inset workspace, the env switcher and banners, view-as, the user menu, Home, the theme toggle and the palette, wired to the router and providers. Installs main.tsx, App.tsx and router.tsx.",
+      "description": "The console frame: the chrome (rail and top bar as one L), the inset workspace, the environment breadcrumb with its coloured top edge and the approval banner, view-as, the user menu, Home, the theme toggle and the palette, wired to the router and providers. Installs main.tsx, App.tsx and router.tsx.",
       "dependencies": [
         "@base-ui/react@^1.9.0",
         "@tanstack/react-query@^5.104.5",
@@ -1062,6 +1062,7 @@
         "bkovaluk/devops-platform/hint",
         "bkovaluk/devops-platform/identity",
         "bkovaluk/devops-platform/input",
+        "bkovaluk/devops-platform/investigations",
         "bkovaluk/devops-platform/kbd",
         "bkovaluk/devops-platform/menu",
         "bkovaluk/devops-platform/mock-api",
@@ -1109,9 +1110,19 @@
           "target": "~/src/app/layout/EnvBanner.tsx"
         },
         {
-          "path": "frontend/src/app/layout/EnvSwitcher.tsx",
+          "path": "frontend/src/app/layout/EnvBreadcrumb.tsx",
           "type": "registry:block",
-          "target": "~/src/app/layout/EnvSwitcher.tsx"
+          "target": "~/src/app/layout/EnvBreadcrumb.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/EnvEdge.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/layout/EnvEdge.tsx"
+        },
+        {
+          "path": "frontend/src/app/layout/env-pick.ts",
+          "type": "registry:block",
+          "target": "~/src/app/layout/env-pick.ts"
         },
         {
           "path": "frontend/src/app/layout/HomePage.tsx",
@@ -1192,6 +1203,7 @@
         "bkovaluk/devops-platform/env",
         "bkovaluk/devops-platform/env-signal",
         "bkovaluk/devops-platform/example-tool",
+        "bkovaluk/devops-platform/investigations",
         "bkovaluk/devops-platform/resource-anchor",
         "bkovaluk/devops-platform/resource-links",
         "bkovaluk/devops-platform/scopes",
@@ -1244,6 +1256,11 @@
           "path": "frontend/src/features/tools/contributions/flags.tsx",
           "type": "registry:block",
           "target": "~/src/features/tools/contributions/flags.tsx"
+        },
+        {
+          "path": "frontend/src/features/tools/contributions/investigations.tsx",
+          "type": "registry:block",
+          "target": "~/src/features/tools/contributions/investigations.tsx"
         }
       ],
       "categories": [
@@ -1451,6 +1468,161 @@
       ]
     },
     {
+      "name": "investigations",
+      "type": "registry:block",
+      "title": "Investigations",
+      "description": "The review dashboard for an alarm-investigating DevOps agent: a list of its findings by review state with search, facets and j/k keys, and a detail pane with the cause, what it verified, the next steps, the hypotheses it weighed and a notebook of every call it made, with acknowledge and close-with-a-verdict.",
+      "dependencies": [
+        "@tanstack/react-query@^5.104.5",
+        "@tanstack/react-router@^1.170.45",
+        "lucide-react@^1.60.0",
+        "zod@^4.6.7"
+      ],
+      "registryDependencies": [
+        "bkovaluk/devops-platform/api-client",
+        "bkovaluk/devops-platform/api-types",
+        "bkovaluk/devops-platform/app-shell",
+        "bkovaluk/devops-platform/button",
+        "bkovaluk/devops-platform/chip",
+        "bkovaluk/devops-platform/dialog",
+        "bkovaluk/devops-platform/empty-state",
+        "bkovaluk/devops-platform/env",
+        "bkovaluk/devops-platform/env-signal",
+        "bkovaluk/devops-platform/error-state",
+        "bkovaluk/devops-platform/fold",
+        "bkovaluk/devops-platform/hint",
+        "bkovaluk/devops-platform/identity",
+        "bkovaluk/devops-platform/identity-bound-mutation",
+        "bkovaluk/devops-platform/input",
+        "bkovaluk/devops-platform/kbd",
+        "bkovaluk/devops-platform/list-card",
+        "bkovaluk/devops-platform/menu",
+        "bkovaluk/devops-platform/panel",
+        "bkovaluk/devops-platform/resource-links",
+        "bkovaluk/devops-platform/scopes",
+        "bkovaluk/devops-platform/section-header",
+        "bkovaluk/devops-platform/segmented-control",
+        "bkovaluk/devops-platform/skeleton",
+        "bkovaluk/devops-platform/state-mark",
+        "bkovaluk/devops-platform/theme-constants",
+        "bkovaluk/devops-platform/toast",
+        "bkovaluk/devops-platform/toaster",
+        "bkovaluk/devops-platform/use-copy",
+        "bkovaluk/devops-platform/utils",
+        "bkovaluk/devops-platform/view-transition"
+      ],
+      "files": [
+        {
+          "path": "frontend/src/app/investigations/InvestigationsView.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/InvestigationsView.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingIdle.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingIdle.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingDetail.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingDetail.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingFacets.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingFacets.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingNotebook.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingNotebook.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingReasoning.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingReasoning.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingActions.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingActions.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingDecision.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingDecision.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/CloseFindingDialog.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/CloseFindingDialog.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/FindingProse.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/FindingProse.tsx"
+        },
+        {
+          "path": "frontend/src/app/investigations/ShortcutsPopover.tsx",
+          "type": "registry:block",
+          "target": "~/src/app/investigations/ShortcutsPopover.tsx"
+        },
+        {
+          "path": "frontend/src/features/findings/findings-api.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/findings/findings-api.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/findings-search.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/findings/findings-search.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/findings-words.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/findings/findings-words.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/findings-reasoning.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/findings/findings-reasoning.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/findings-run.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/findings/findings-run.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/findings-markdown.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/findings/findings-markdown.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/findings-toast.ts",
+          "type": "registry:lib",
+          "target": "~/src/features/findings/findings-toast.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/use-findings.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/findings/use-findings.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/use-finding-actions.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/findings/use-finding-actions.ts"
+        },
+        {
+          "path": "frontend/src/features/findings/use-triage-keys.ts",
+          "type": "registry:hook",
+          "target": "~/src/features/findings/use-triage-keys.ts"
+        }
+      ],
+      "categories": [
+        "blocks"
+      ]
+    },
+    {
       "name": "assistant",
       "type": "registry:block",
       "title": "Assistant",
@@ -1598,6 +1770,11 @@
           "path": "frontend/src/test/msw/db.ts",
           "type": "registry:lib",
           "target": "~/src/test/msw/db.ts"
+        },
+        {
+          "path": "frontend/src/test/msw/findings.ts",
+          "type": "registry:lib",
+          "target": "~/src/test/msw/findings.ts"
         },
         {
           "path": "frontend/public/mockServiceWorker.js",

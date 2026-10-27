@@ -68,4 +68,27 @@ describe('Menu', () => {
     expect(onSelect).toHaveBeenCalledExactlyOnceWith('sign-out')
     expect(screen.queryByRole('menu')).not.toBeInTheDocument()
   })
+
+  it('keeps a disabled item in the menu, reachable and inert', async () => {
+    const onSelect = vi.fn()
+    const { user } = renderUi(
+      <Menu
+        trigger={
+          <button type="button" aria-label="Environment">
+            E
+          </button>
+        }
+      >
+        <MenuItem checked={false} disabled onSelect={() => onSelect('prod')}>
+          Prod
+        </MenuItem>
+      </Menu>,
+    )
+    await user.click(screen.getByRole('button', { name: 'Environment' }))
+    const item = screen.getByRole('menuitemradio', { name: 'Prod' })
+    expect(item).toHaveAttribute('aria-disabled', 'true')
+    await user.click(item)
+    expect(onSelect).not.toHaveBeenCalled()
+    expect(screen.getByRole('menu', { name: 'Environment' })).toBeInTheDocument()
+  })
 })

@@ -60,6 +60,7 @@ All settings are environment variables; `.env.example` lists every one.
 | `STORE` | `memory` | `memory` or `dynamodb` |
 | `DYNAMODB_TABLE` | `devops-platform` | Table used when `STORE=dynamodb` |
 | `AWS_ROLE_ARNS` | `{}` | Optional `{"env": "role arn"}` for cross-account tools |
+| `FINDINGS_TABLES` | `{}` | `{"env": "table"}`: the DevOps agent's findings table per env; an env left out reads `devops-agent-findings-<env>` |
 | `AGENT_MODEL` | unset | Pydantic AI model string for the assistant; unset turns it off |
 
 ## Auth
@@ -82,9 +83,9 @@ environment; `flags:write:dev` covers dev only.
 
 | Role | Scopes |
 |---|---|
-| `viewer` | `flags:read` |
-| `editor` | `flags:read`, `flags:write` |
-| `reviewer` | `flags:read`, `approvals:review` |
+| `viewer` | `flags:read`, `findings:read` |
+| `editor` | `flags:read`, `flags:write`, `findings:read`, `findings:review` |
+| `reviewer` | `flags:read`, `approvals:review`, `findings:read` |
 | `admin` | `*` |
 
 Routes about one environment check the scope qualified with it, so
@@ -112,6 +113,35 @@ request was filed is not overwritten). The rules, the same for every tool:
 - only pending requests can be decided; one older than `APPROVAL_TTL_HOURS`
   reads as `expired`;
 - one pending request per item at a time.
+
+## Investigations
+
+`platform_api/tools/findings/` serves the review side of an alarm-investigating
+DevOps agent, which writes one finding per investigation to a DynamoDB table in
+each environment. The routes are in `../CONTRACT.md`; reads take
+`findings:read` and reviews `findings:review` in the finding's env.
+
+With `STORE=dynamodb` each env's table (`FINDINGS_TABLES`, default
+`devops-agent-findings-<env>`) is read through that env's client from
+`platform_api.aws.get_boto3_client`, so a table in another account is reached
+with its `AWS_ROLE_ARNS` role. The table has the hash key `pk` and the GSIs
+`by_status` (`status`, `created_at`) and `by_resource` (`resource_key`,
+`created_at`), both projecting all attributes. A list is one `by_status`
+query over the window per env, capped at 5,000 items; the table is never
+scanned. The role needs `dynamodb:GetItem` and `UpdateItem` on the table and
+`Query` on its indexes. A review writes only `status`, `acknowledged_at`,
+`acknowledged_by`, `resolution`, `resolution_note`, `resolved_at`,
+`resolved_by` and `ttl` on `finding#<id>`, and `ttl` on its `snap#<id>`, so the
+role can be held to those attributes with a `dynamodb:Attributes` condition.
+With `STORE=memory` the tool runs on example findings.
+
+Reviews apply at once in every environment and are never filed with the
+approval engine: they record a verdict on the agent's own record and change
+nothing the finding is about. Acknowledging sets `ttl` to 90 days from then;
+closing sets it to 365 days on the finding and on its eval snapshot, as the
+agent's retention contract says. `confirmed` and `false_positive` grade a
+reported cause and become the agent's memory of the resource; `wrong` needs a
+note; `dismissed` closes a finding that reported none.
 
 ## AI: MCP and the assistant
 
@@ -186,7 +216,8 @@ If the tool calls AWS in per-environment accounts, use
 
 ## DynamoDB
 
-`STORE=dynamodb` keeps flags and approvals in one table with string keys
+`STORE=dynamodb` keeps flags and approvals in one table (the DevOps agent's
+findings live in its own tables, see Investigations) with string keys
 `pk` (partition) and `sk` (sort); on-demand billing is fine:
 
 ```bash

@@ -30,7 +30,13 @@ uv run uvicorn platform_api.main:app --reload
   routes use `selected_envs`. Requirements carry the environment as qualifier.
 - A change outside `DIRECT_ENVS` is always filed with the approval engine and
   applied only by the tool's registered `replay`. The engine owns the
-  two-person rules; tools never re-implement them.
+  two-person rules; tools never re-implement them. Reviewing a DevOps agent
+  finding (`tools/findings/`) is not a change to an environment: it records a
+  verdict on the agent's own record, so it applies at once everywhere.
+- The findings tool reads the agent's tables and writes only the review fields
+  the agent's contract names (`status`, acknowledgement, resolution, `ttl`, and
+  the snapshot's `ttl` on close). Read items through `tools/findings/items.py`,
+  which tolerates anything an older agent did not write.
 - AI (MCP and the agent) reaches a tool only through the `AiAction`s it
   registers, and an action's `run` calls the same service functions as the
   routes, as the caller. Deciding an approval is never an AI action. Tests use

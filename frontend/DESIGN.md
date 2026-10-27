@@ -100,9 +100,13 @@ and the tests in `src/app/*-affordances.test.ts` refuse drift:
 - **Environments** have their own family: dev green, qa sky, staging violet,
   prod rose, any other name neutral (`--env-other`). Health colours are never an
   environment's. Environment presence is explicit language in stable places:
-  the switcher ("Prod · Live"), the banner under the top bar
-  ("staging · writes require approval"), "read-only" beside the all-envs scope,
-  and the env named on every write button.
+  the breadcrumb's env crumb ("Prod · Live") and the 3px line along the top of
+  the window in the same colour, the banner under the top bar
+  ("staging · writes require approval") for tools whose writes become
+  requests, "read-only" beside the all-envs scope, and the env named on every
+  write button. The env lives in the URL and only the person changes it; an env
+  the open tool cannot show, or the person cannot read there, is greyed in the
+  menu with the reason, never hidden.
 - **Data ink** (`--data-ink`, `--data-ink-strong`): the neutral a chart draws
   an ordinary reading in, and the column under the pointer.
 - Wide-gamut displays get an OKLCH layer with the same hue and lightness and

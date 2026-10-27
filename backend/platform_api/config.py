@@ -66,6 +66,11 @@ class Settings(BaseSettings):
     # JSON {"<env>": "<role arn>"}; an env left out uses ambient credentials.
     aws_role_arns: str = "{}"
 
+    # JSON {"<env>": "<table name>"}: the DevOps agent's findings table in each
+    # env, read through that env's AWS role. An env left out reads
+    # `devops-agent-findings-<env>`, the agent's default name.
+    findings_tables: str = "{}"
+
     # A Pydantic AI model string, e.g. "anthropic:<model>"; unset turns the assistant off.
     agent_model: str | None = None
 
@@ -97,6 +102,9 @@ class Settings(BaseSettings):
                 raise ValueError(f"AUTH_MODE=oidc requires {', '.join(missing)}")
         # Parsed eagerly so malformed JSON fails at startup, not on first use.
         _ = self.role_binding_map, self.custom_role_map, self.aws_role_arn_map
+        stray = sorted(set(self.findings_table_map) - set(envs))
+        if stray:
+            raise ValueError(f"FINDINGS_TABLES names environments not in ENVIRONMENTS: {stray}")
         return self
 
     @property
@@ -145,6 +153,17 @@ class Settings(BaseSettings):
         if not all(isinstance(v, str) for v in parsed.values()):
             raise ValueError("AWS_ROLE_ARNS must map environment names to role ARN strings")
         return {env: str(arn) for env, arn in parsed.items()}
+
+    @property
+    def findings_table_map(self) -> dict[str, str]:
+        parsed = _json_object("FINDINGS_TABLES", self.findings_tables)
+        if not all(isinstance(v, str) and v for v in parsed.values()):
+            raise ValueError("FINDINGS_TABLES must map environment names to table names")
+        return {env: str(table) for env, table in parsed.items()}
+
+    def findings_table(self, env: str) -> str:
+        """The findings table the DevOps agent writes in *env*."""
+        return self.findings_table_map.get(env, f"devops-agent-findings-{env}")
 
 
 @lru_cache(maxsize=1)

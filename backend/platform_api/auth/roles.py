@@ -1,7 +1,8 @@
 """Roles: named sets of grants, and who holds which.
 
-The seeded roles cover the example tool; ``CUSTOM_ROLES`` adds more and
-``ROLE_BINDINGS`` assigns them by email. Everyone else holds ``DEFAULT_ROLES``.
+The seeded roles cover the example tool and the review of the DevOps agent's
+findings; ``CUSTOM_ROLES`` adds more and ``ROLE_BINDINGS`` assigns them by
+email. Everyone else holds ``DEFAULT_ROLES``.
 """
 
 from collections.abc import Mapping, Sequence
@@ -13,9 +14,9 @@ from platform_api.config import Settings
 
 #: The roles every deployment starts with.
 SEEDED_ROLES: Final[Mapping[str, tuple[str, ...]]] = {
-    "viewer": ("flags:read",),
-    "editor": ("flags:read", "flags:write"),
-    "reviewer": ("flags:read", "approvals:review"),
+    "viewer": ("flags:read", "findings:read"),
+    "editor": ("flags:read", "flags:write", "findings:read", "findings:review"),
+    "reviewer": ("flags:read", "approvals:review", "findings:read"),
     "admin": ("*",),
 }
 

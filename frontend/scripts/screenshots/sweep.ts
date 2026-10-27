@@ -51,6 +51,9 @@ const PAGES: ReadonlyArray<readonly [name: string, path: string]> = [
   ['flag-create', '/flags?env=all&create=true'],
   ['approvals', '/approvals'],
   ['approvals-all', '/approvals?status=all'],
+  ['investigations', '/investigations'],
+  ['investigation-detail', '/investigations/prod/f-checkout-0001'],
+  ['investigation-close', '/investigations/prod/f-checkout-0001?close=wrong'],
   ['not-found', '/nope'],
 ]
 
@@ -96,6 +99,29 @@ const SCENES: Scene[] = [
     path: '/approvals',
     act: async (page) => {
       await page.getByRole('button', { name: /Update flag checkout-v2 in prod/ }).click()
+    },
+  },
+  {
+    name: 'investigation-detail',
+    principal: 'admin',
+    path: '/investigations/prod/f-checkout-0001',
+  },
+  {
+    name: 'investigation-hypothesis-focus',
+    principal: 'admin',
+    path: '/investigations/prod/f-orders-0001',
+    act: async (page) => {
+      const hypotheses = page.getByRole('list', { name: 'Hypotheses' })
+      await hypotheses.getByRole('button').first().click()
+      await page.getByRole('list', { name: 'Notebook' }).scrollIntoViewIfNeeded()
+    },
+  },
+  {
+    name: 'env-breadcrumb-menu',
+    principal: 'admin',
+    path: '/investigations?env=prod',
+    act: async (page) => {
+      await page.getByRole('button', { name: /^Environment:/ }).click()
     },
   },
 ]

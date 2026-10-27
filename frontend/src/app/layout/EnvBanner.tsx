@@ -1,18 +1,20 @@
 /**
  * Environment presence as explicit language in a stable place: a strip under
- * the top bar whenever the open surface is about an environment where writes
- * become approval requests.
+ * the top bar whenever the open tool files its writes there as approval
+ * requests, for the env it is showing.
  */
 import { EnvSignal } from '@/components/ui/env-signal'
 import { useNeedsApproval } from '@/features/auth/use-needs-approval'
-import { envBannerClass } from '@/lib/env'
+import type { ToolDefinition } from '@/features/tools/tool-registry'
+import { ALL_ENVS, envBannerClass } from '@/lib/env'
 import { cn } from '@/lib/utils'
-import { useFocusedEnv } from './use-focused-env'
+import { useEnvScope } from './env-pick'
 
-export function EnvBanner() {
-  const { env } = useFocusedEnv()
+export function EnvBanner({ tool }: { tool: ToolDefinition }) {
+  const { shown } = useEnvScope(tool)
+  const env = shown ?? ALL_ENVS
   const routed = useNeedsApproval(env)
-  if (!routed) return null
+  if (!tool.approvalRouted || !routed) return null
   return (
     <div
       role="status"

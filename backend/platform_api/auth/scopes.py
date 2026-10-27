@@ -26,6 +26,7 @@ SEPARATOR: Final = ":"
 TOOL_ACTIONS: Final[Mapping[str, tuple[str, ...]]] = {
     "flags": ("read", "write"),
     "approvals": ("review",),
+    "findings": ("read", "review"),
 }
 
 

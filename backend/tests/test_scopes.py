@@ -91,6 +91,8 @@ def test_role_book_merges_grants_and_defaults() -> None:
     assert [str(g) for g in book.grants_for("lead@example.com")] == [
         "flags:read",
         "flags:write",
+        "findings:read",
+        "findings:review",
         "approvals:review",
     ]
     assert book.roles_for("anyone@example.com") == ("viewer",)

@@ -1,9 +1,12 @@
 # DevOps Platform — frontend
 
 A React console for operating services across environments: a shell (rail,
-top bar, environment switcher, command palette, Home), a tool registry that
+top bar, environment breadcrumb, command palette, Home), a tool registry that
 every surface is built from, scope-based access, a two-person approval flow,
 and one example tool — feature flags — that uses all of it.
+
+A second tool, Investigations, reviews the findings of an alarm-investigating
+DevOps agent.
 
 It talks to the FastAPI backend in `../backend` through the contract in
 `../CONTRACT.md`, or to an in-browser mock of that contract (MSW mode).

@@ -32,10 +32,12 @@ src/
 ├── App.tsx, main.tsx, router.tsx   # providers, boot, the route tree
 ├── app/                            # surfaces
 │   ├── AppShell.tsx                # chrome + workspace + assistant dock + palette
-│   ├── layout/                     # Sidebar, TopBar, EnvSwitcher, UserMenu, banners,
-│   │                               # ViewHeader, HomePage, AssistantDock, SignInPage
+│   ├── layout/                     # Sidebar, TopBar, EnvBreadcrumb, EnvEdge, env-pick,
+│   │                               # UserMenu, banners, ViewHeader, HomePage,
+│   │                               # AssistantDock, SignInPage
 │   ├── assistant/                  # the dock's body: thread, composer, proposal card
 │   ├── flags/                      # the example tool
+│   ├── investigations/             # the DevOps agent's findings: list, detail, review
 │   ├── approvals/                  # the inbox view
 │   └── *-affordances.test.ts       # the standards ratchets
 ├── components/
@@ -46,6 +48,7 @@ src/
 │   ├── config/                     # GET /config
 │   ├── tools/                      # the tool registry, ToolBoundary, contributions
 │   ├── flags/                      # flags API, queries, approval-aware actions
+│   ├── findings/                   # findings API, URL state, words, reasoning, keys
 │   ├── approvals/                  # queue, decisions, toasts
 │   └── assistant/                  # AG-UI client, thread store, runtime, proposals
 ├── lib/                            # api-client, notify, toast, popover, view-transition,
@@ -89,6 +92,9 @@ A tool is one registry entry, its routes, its hooks and its views.
      path: '/widgets',                     // add to ToolPath
      view: WidgetsView,                    // lazy(() => import(...))
      access: { kind: 'scoped', tool: 'widgets', entry: inAnyEnv('widgets', 'read') },
+     env: 'any',                           // 'any': the env pick steers it; 'none': tied to no env
+     itemInEveryEnv: true,                 // another env on an item's page opens the same item
+     approvalRouted: true,                 // writes outside direct envs become requests
      title: 'Widgets',                     // document title segment
      shortcutRank: 3,                      // rail order and digit shortcut
      homeTile: { rank: 1, component: WidgetsHomeTile },
@@ -113,6 +119,40 @@ A tool is one registry entry, its routes, its hooks and its views.
    (icon, words, link, diff). Nothing else branches on `approval.tool`.
 8. **MSW.** Add the routes to `test/msw/handlers.ts` and fixtures to
    `test/msw/db.ts`, on the API's terms.
+
+## The environment
+
+The env lives in the URL and nowhere else: the shell's `env` search param on a
+list (absent is every env), or the `$env` path param of a single item. The top
+bar names it as a breadcrumb (`app/layout/EnvBreadcrumb.tsx`) and `EnvEdge`
+draws its colour along the top of the window; `app/layout/env-pick.ts` holds
+the rules both use.
+
+- Only the person changes it, from the breadcrumb or with ⌥0 (every env) and
+  ⌥1 onwards. Never navigate to another env on anyone's behalf: no
+  "advance to the next item" that lands in another env, no default env.
+- Every env stays in the menu. One the open tool cannot show, or one the
+  principal cannot read there (`pickRefusal`), is a disabled `MenuItem` with
+  the reason under it, never hidden.
+- A tool declares in the registry how the pick steers it (`env: 'any' |
+  'none'`). On an item's page, `itemInEveryEnv` opens the same item in the env
+  picked (flags); without it the pick returns to the tool's list in that env,
+  with the list's own keys (investigations).
+- `EnvBanner` ("writes require approval") shows only for a tool with
+  `approvalRouted`, for the env on screen.
+
+## Investigations
+
+`app/investigations/` and `features/findings/` review the findings of an
+alarm-investigating DevOps agent (`/api/findings`). The list's tab, window,
+search and facets are URL state (`features/findings/findings-search.ts`); the
+open finding is `/investigations/$env/$findingId`, and the close dialog is
+`?close=<resolution>`. Reviews go through `use-finding-actions.ts` and apply
+directly in every env: they are never approval requests, so the tool does not
+use `useNeedsApproval` and its entry has no `approvalRouted`. Single-key
+triage shortcuts (`j`, `k`, `/`, `a`, `c`, `h`, `?`, Escape) are
+`use-triage-keys.ts`; a key typed into a field or inside an overlay is never
+theirs. Model text is drawn by `FindingProse` as text, never as markup.
 
 ## Approval-aware writes
 

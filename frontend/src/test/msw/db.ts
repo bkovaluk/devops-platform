@@ -1,9 +1,11 @@
 /**
  * The mock's state: flags in three environments, a spread of approval
- * requests in every status, and a deterministic hour of evaluations per flag.
+ * requests in every status, a deterministic hour of evaluations per flag, and
+ * the DevOps agent's findings in every review state.
  * Writes change it for the life of the tab (or the test); `resetDb` starts over.
  */
-import type { AppConfig, Approval, EvaluationSeries, Flag } from '@/types/api'
+import type { AppConfig, Approval, EvaluationSeries, FindingDetail, Flag } from '@/types/api'
+import { seedFindings } from './findings'
 
 export const MOCK_CONFIG: AppConfig = {
   app_name: 'DevOps Platform',
@@ -90,6 +92,7 @@ const EDITORS = ['lin@example.com', 'grace@example.com', 'ada@example.com']
 interface Db {
   flags: Flag[]
   approvals: Approval[]
+  findings: FindingDetail[]
   sequence: number
   /** The instant the seed was taken; evaluations are counted back from now. */
   seededAt: number
@@ -261,7 +264,13 @@ function seedApprovals(now: number, flags: readonly Flag[]): Approval[] {
 
 function seed(now = Date.now()): Db {
   const flags = seedFlags(now)
-  return { flags, approvals: seedApprovals(now, flags), sequence: 1004, seededAt: now }
+  return {
+    flags,
+    approvals: seedApprovals(now, flags),
+    findings: seedFindings(now),
+    sequence: 1004,
+    seededAt: now,
+  }
 }
 
 export let db: Db = seed()

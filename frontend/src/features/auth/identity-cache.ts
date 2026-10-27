@@ -24,6 +24,7 @@ export const IDENTITY_QUERY_PREFIXES: readonly QueryKey[] = [['auth', 'me']]
 export const TOOL_QUERY_PREFIXES: Readonly<Record<Tool, readonly QueryKey[]>> = {
   flags: [['flags']],
   approvals: [['approvals']],
+  findings: [['findings']],
 }
 
 /** Roots that hold no principal's data, listed so a test can tell "public"

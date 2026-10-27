@@ -15,13 +15,13 @@ It never runs in a production build.
 `?as=<principal>` picks the principal the mock answers as, and the choice
 sticks to the tab. While MSW mode is on, the account menu lists them too.
 
-| Principal  | Person             | Grants                           |
-| ---------- | ------------------ | -------------------------------- |
-| `admin`    | ada@example.com    | `*`                              |
-| `editor`   | lin@example.com    | `flags:read`, `flags:write`      |
-| `reviewer` | grace@example.com  | `flags:read`, `approvals:review` |
-| `viewer`   | alan@example.com   | `flags:read`                     |
-| `empty`    | nobody@example.com | none                             |
+| Principal  | Person             | Grants                                                          |
+| ---------- | ------------------ | --------------------------------------------------------------- |
+| `admin`    | ada@example.com    | `*`                                                             |
+| `editor`   | lin@example.com    | `flags:read`, `flags:write`, `findings:read`, `findings:review` |
+| `reviewer` | grace@example.com  | `flags:read`, `approvals:review`, `findings:read`               |
+| `viewer`   | alan@example.com   | `flags:read`, `findings:read`                                   |
+| `empty`    | nobody@example.com | none                                                            |
 
 The grants come from the seeded roles in `scope-contract.json`.
 
@@ -36,6 +36,12 @@ The grants come from the seeded roles in `scope-contract.json`.
   hours reads as expired, and an approval whose change no longer applies ends
   `failed` with the reason in `result`.
 - `X-View-As: <email>`: admins only, read-only — any write under it is a 403.
+- Investigations: the DevOps agent's findings in every review state across the
+  three environments, listed by status over a window with the API's facets,
+  triage rule, search and paging; acknowledging needs an open finding, closing
+  grades a reported cause (`wrong` needs a note) or dismisses one that reported
+  none, and a closed finding cannot be closed again. Reviews apply in every
+  environment, never as approval requests.
 - The assistant: `GET /api/agent/status` says enabled, and `POST /api/agent`
   streams AG-UI events from a script. A question is a read (`list_flags`,
   `get_flag` or `list_approvals`) and a short answer; "set checkout-v2 to 75%
@@ -51,6 +57,8 @@ The grants come from the seeded roles in `scope-contract.json`.
 - `db.ts` — flags in three environments, approvals in every status, and a
   deterministic hour of evaluations per flag. `resetDb()` starts over; the test
   setup calls it after every test.
+- `findings.ts`: the example findings (invented services), which `db.ts`
+  seeds beside the rest, and the list rules `GET /api/findings` applies.
 - `agent.ts` — the scripted assistant and its `?assistant=` switch.
 - `handlers.ts` — the routes. `setLatency(ms)` slows every answer (the browser
   mode uses 120ms so loading states are visible).

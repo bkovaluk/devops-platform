@@ -123,6 +123,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/findings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Findings
+         * @description One status's findings over a window, faceted and filtered, newest first.
+         */
+        get: operations["findings_list_findings"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/findings/{finding_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Finding
+         * @description One finding, with the earlier findings on the same resource.
+         */
+        get: operations["findings_get_finding"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/findings/{finding_id}/acknowledge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Acknowledge Finding
+         * @description Take an open finding: somebody is looking at it.
+         */
+        post: operations["findings_acknowledge_finding"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/findings/{finding_id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Close Finding
+         * @description Close a finding with a verdict on what the agent reported.
+         */
+        post: operations["findings_close_finding"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/flags": {
         parameters: {
             query?: never;
@@ -232,6 +312,8 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** @enum {string} */
+        ActionKind: "change" | "code" | "read" | "approval";
         /** AgentStatus */
         AgentStatus: {
             /** Enabled */
@@ -320,6 +402,45 @@ export interface components {
             /** Note */
             note?: string | null;
         };
+        /**
+         * CheckedFact
+         * @description A fact the agent verified with its tools, and the steps that show it.
+         */
+        CheckedFact: {
+            /**
+             * Steps
+             * @default []
+             */
+            steps: number[];
+            /** Text */
+            text: string;
+        };
+        /** @enum {string} */
+        Confidence: "high" | "medium" | "low";
+        /**
+         * ContextSummary
+         * @description What the agent's context bundle held, never its content.
+         */
+        ContextSummary: {
+            /** Chars */
+            chars?: number | null;
+            /**
+             * Counts
+             * @default {}
+             */
+            counts: {
+                [key: string]: number;
+            };
+            /**
+             * Sections
+             * @default {}
+             */
+            sections: {
+                [key: string]: string;
+            };
+            /** Truncated */
+            truncated?: boolean | null;
+        };
         /** ErrorBody */
         ErrorBody: {
             /** Detail */
@@ -352,6 +473,408 @@ export interface components {
              */
             points: components["schemas"]["EvaluationPoint"][];
         };
+        /**
+         * Evidence
+         * @description One fact the finding rests on, and the trail steps it came from.
+         */
+        Evidence: {
+            /** Detail */
+            detail?: string | null;
+            /** Kind */
+            kind?: string | null;
+            /**
+             * Steps
+             * @default []
+             */
+            steps: number[];
+        };
+        /**
+         * FindingAction
+         * @description Something only a person can do: a change, a code fix, a denied read, an approval.
+         */
+        FindingAction: {
+            /** Command */
+            command?: string | null;
+            /** Detail */
+            detail?: string | null;
+            /** @default change */
+            kind: components["schemas"]["ActionKind"];
+            /** Text */
+            text: string;
+        };
+        /**
+         * FindingDetail
+         * @description One finding whole, with the findings before it on the same resource.
+         */
+        FindingDetail: {
+            /** Account Id */
+            account_id?: string | null;
+            /** Acknowledged At */
+            acknowledged_at?: string | null;
+            /** Acknowledged By */
+            acknowledged_by?: string | null;
+            /**
+             * Actions
+             * @default []
+             */
+            actions: components["schemas"]["FindingAction"][];
+            /** Alarm Arn */
+            alarm_arn?: string | null;
+            /** Alarm Count */
+            alarm_count?: number | null;
+            /** Alarm Name */
+            alarm_name?: string | null;
+            /** Alarm Reason */
+            alarm_reason?: string | null;
+            /** Alarm Time */
+            alarm_time?: string | null;
+            /**
+             * Checked
+             * @default []
+             */
+            checked: components["schemas"]["CheckedFact"][];
+            confidence?: components["schemas"]["Confidence"] | null;
+            /** Confidence Reason */
+            confidence_reason?: string | null;
+            context_summary?: components["schemas"]["ContextSummary"] | null;
+            /** Created At */
+            created_at: string;
+            /** Env */
+            env: string;
+            /** Error Signature */
+            error_signature?: string | null;
+            /**
+             * Evidence
+             * @default []
+             */
+            evidence: components["schemas"]["Evidence"][];
+            /** Finding Id */
+            finding_id: string;
+            /** Fix Effort */
+            fix_effort?: string | null;
+            /** Fix Effort Reason */
+            fix_effort_reason?: string | null;
+            /**
+             * History
+             * @default []
+             */
+            history: components["schemas"]["FindingHistoryEntry"][];
+            /**
+             * Hypotheses
+             * @default []
+             */
+            hypotheses: components["schemas"]["Hypothesis"][];
+            /** Incident Id */
+            incident_id?: string | null;
+            /**
+             * Kind
+             * @default alarm
+             */
+            kind: string;
+            /** Last Seen At */
+            last_seen_at?: string | null;
+            /** Likely Cause */
+            likely_cause?: string | null;
+            /**
+             * Linked Alarms
+             * @default []
+             */
+            linked_alarms: string[];
+            /**
+             * Linked Count
+             * @default 0
+             */
+            linked_count: number;
+            /** Linked To */
+            linked_to?: string | null;
+            /**
+             * Member Alarms
+             * @default []
+             */
+            member_alarms: string[];
+            /**
+             * Model
+             * @description The model id, shortened: 'opus-5.5'
+             */
+            model?: string | null;
+            /** Outcome */
+            outcome?: string | null;
+            /** Previous Finding Id */
+            previous_finding_id?: string | null;
+            /**
+             * Prior Finding Ids
+             * @default []
+             */
+            prior_finding_ids: string[];
+            /** Proposed Severity */
+            proposed_severity?: string | null;
+            /**
+             * Recurrence Count
+             * @default 0
+             */
+            recurrence_count: number;
+            /** Region */
+            region?: string | null;
+            resolution?: components["schemas"]["Resolution"] | null;
+            /** Resolution Note */
+            resolution_note?: string | null;
+            /** Resolved At */
+            resolved_at?: string | null;
+            /** Resolved By */
+            resolved_by?: string | null;
+            /** Resource Key */
+            resource_key?: string | null;
+            /**
+             * Resource Name
+             * @description The dimension value its key names, else the alarm's name
+             */
+            resource_name?: string | null;
+            /**
+             * Resource Type
+             * @description The resource's kind, read off its key: 'Lambda', 'SQS'
+             */
+            resource_type?: string | null;
+            run?: components["schemas"]["RunSummary"] | null;
+            /** Severity */
+            severity?: string | null;
+            /** Severity Floor */
+            severity_floor?: string | null;
+            /**
+             * Source
+             * @description 'cloudwatch' or 'datadog'
+             */
+            source?: string | null;
+            /**
+             * Sources With Data
+             * @default []
+             */
+            sources_with_data: string[];
+            status: components["schemas"]["FindingStatus"];
+            /** Steps */
+            steps?: number | null;
+            /**
+             * Suggested Actions
+             * @default []
+             */
+            suggested_actions: string[];
+            /** Summary */
+            summary?: string | null;
+            /** Title */
+            title?: string | null;
+            /** Tokens Used */
+            tokens_used?: number | null;
+            /** Tool Call Count */
+            tool_call_count?: number | null;
+            /**
+             * Tool Trail
+             * @default []
+             */
+            tool_trail: components["schemas"]["ToolTrailStep"][];
+            /** Tools Used */
+            tools_used?: string[] | null;
+        };
+        /**
+         * FindingFacets
+         * @description Counts over the window, the status and the triage rule, before any other filter.
+         */
+        FindingFacets: {
+            /**
+             * Confidence
+             * @default {}
+             */
+            confidence: {
+                [key: string]: number;
+            };
+            /**
+             * Effort
+             * @default {}
+             */
+            effort: {
+                [key: string]: number;
+            };
+            /**
+             * Kind
+             * @default {}
+             */
+            kind: {
+                [key: string]: number;
+            };
+            /**
+             * Model
+             * @default {}
+             */
+            model: {
+                [key: string]: number;
+            };
+            /**
+             * Outcome
+             * @default {}
+             */
+            outcome: {
+                [key: string]: number;
+            };
+            /**
+             * Resolution
+             * @default {}
+             */
+            resolution: {
+                [key: string]: number;
+            };
+            /**
+             * Resolved By
+             * @default {}
+             */
+            resolved_by: {
+                [key: string]: number;
+            };
+            /**
+             * Severity
+             * @default {}
+             */
+            severity: {
+                [key: string]: number;
+            };
+            /**
+             * Tool
+             * @default {}
+             */
+            tool: {
+                [key: string]: number;
+            };
+            /**
+             * Type
+             * @default {}
+             */
+            type: {
+                [key: string]: number;
+            };
+        };
+        /**
+         * FindingHistoryEntry
+         * @description An earlier finding on the same resource.
+         */
+        FindingHistoryEntry: {
+            /** Created At */
+            created_at?: string | null;
+            /** Finding Id */
+            finding_id: string;
+            /** Outcome */
+            outcome?: string | null;
+            /** Resolution */
+            resolution?: string | null;
+            /** Status */
+            status?: string | null;
+            /** Title */
+            title?: string | null;
+        };
+        /** FindingList */
+        FindingList: {
+            /**
+             * Env
+             * @description The environment selector the list was asked for
+             */
+            env: string;
+            facets: components["schemas"]["FindingFacets"];
+            /**
+             * Items
+             * @description Newest first, one page
+             */
+            items: components["schemas"]["FindingRow"][];
+            status: components["schemas"]["FindingStatus"];
+            /**
+             * Total
+             * @description Every finding the narrowing matches
+             */
+            total: number;
+            /**
+             * Truncated
+             * @description An environment held more than one read takes
+             */
+            truncated: boolean;
+            window: components["schemas"]["FindingWindow"];
+        };
+        /**
+         * FindingRow
+         * @description One finding as the list shows it.
+         */
+        FindingRow: {
+            /** Acknowledged By */
+            acknowledged_by?: string | null;
+            /** Alarm Count */
+            alarm_count?: number | null;
+            /** Alarm Name */
+            alarm_name?: string | null;
+            confidence?: components["schemas"]["Confidence"] | null;
+            /** Created At */
+            created_at: string;
+            /** Env */
+            env: string;
+            /** Error Signature */
+            error_signature?: string | null;
+            /** Finding Id */
+            finding_id: string;
+            /** Fix Effort */
+            fix_effort?: string | null;
+            /**
+             * Kind
+             * @default alarm
+             */
+            kind: string;
+            /**
+             * Linked Count
+             * @default 0
+             */
+            linked_count: number;
+            /**
+             * Model
+             * @description The model id, shortened: 'opus-5.5'
+             */
+            model?: string | null;
+            /** Outcome */
+            outcome?: string | null;
+            /**
+             * Recurrence Count
+             * @default 0
+             */
+            recurrence_count: number;
+            resolution?: components["schemas"]["Resolution"] | null;
+            /** Resolved At */
+            resolved_at?: string | null;
+            /** Resolved By */
+            resolved_by?: string | null;
+            /** Resource Key */
+            resource_key?: string | null;
+            /**
+             * Resource Name
+             * @description The dimension value its key names, else the alarm's name
+             */
+            resource_name?: string | null;
+            /**
+             * Resource Type
+             * @description The resource's kind, read off its key: 'Lambda', 'SQS'
+             */
+            resource_type?: string | null;
+            /** Severity */
+            severity?: string | null;
+            /**
+             * Source
+             * @description 'cloudwatch' or 'datadog'
+             */
+            source?: string | null;
+            status: components["schemas"]["FindingStatus"];
+            /** Steps */
+            steps?: number | null;
+            /** Title */
+            title?: string | null;
+            /** Tool Call Count */
+            tool_call_count?: number | null;
+            /** Tools Used */
+            tools_used?: string[] | null;
+        };
+        /** @enum {string} */
+        FindingStatus: "open" | "acknowledged" | "closed";
+        /** @enum {string} */
+        FindingWindow: "24h" | "7d" | "30d" | "90d" | "365d";
         /** Flag */
         Flag: {
             /** Description */
@@ -423,6 +946,23 @@ export interface components {
              */
             status: "ok";
         };
+        /**
+         * Hypothesis
+         * @description A cause the agent considered, where it ended up, and the steps that tested it.
+         */
+        Hypothesis: {
+            /** @default unverified */
+            state: components["schemas"]["HypothesisState"];
+            /**
+             * Steps
+             * @default []
+             */
+            steps: number[];
+            /** Text */
+            text?: string | null;
+        };
+        /** @enum {string} */
+        HypothesisState: "likely" | "ruled_out" | "unverified";
         /** Me */
         Me: {
             /** Email */
@@ -458,6 +998,81 @@ export interface components {
              * @description Why, for the requester
              */
             note: string;
+        };
+        /** @enum {string} */
+        Resolution: "confirmed" | "false_positive" | "wrong" | "dismissed";
+        /** ResolveFindingBody */
+        ResolveFindingBody: {
+            /**
+             * Note
+             * @description Required for 'wrong'
+             */
+            note?: string | null;
+            resolution: components["schemas"]["Resolution"];
+        };
+        /**
+         * RunSummary
+         * @description How the investigation ended: why it stopped and what it spent.
+         */
+        RunSummary: {
+            /** Duration Seconds */
+            duration_seconds?: number | null;
+            /** Max Turns */
+            max_turns?: number | null;
+            /** Stop Reason */
+            stop_reason?: string | null;
+            /** Token Budget */
+            token_budget?: number | null;
+            /** Turns */
+            turns?: number | null;
+            /** Weighted Tokens */
+            weighted_tokens?: number | null;
+        };
+        /**
+         * ToolCall
+         * @description What a step called, as the agent describes it; the UI renders this, never the args.
+         *
+         *     ``label`` is ``provider.service.action`` (``aws.s3.list_object_versions``);
+         *     ``refused`` is set when a guard blocked the call.
+         */
+        ToolCall: {
+            /** Action */
+            action: string;
+            /**
+             * Kind
+             * @default evidence
+             * @enum {string}
+             */
+            kind: "evidence" | "lookup";
+            /** Label */
+            label: string;
+            /** Provider */
+            provider: string;
+            /** Refused */
+            refused?: string | null;
+            /** Service */
+            service: string;
+            /** Subject */
+            subject?: string | null;
+        };
+        /**
+         * ToolTrailStep
+         * @description One tool call of the investigation; its output is never kept.
+         */
+        ToolTrailStep: {
+            /** Args */
+            args?: {
+                [key: string]: unknown;
+            } | null;
+            call?: components["schemas"]["ToolCall"] | null;
+            /** Input */
+            input?: string | null;
+            /** Status */
+            status?: ("data" | "empty" | "error") | null;
+            /** Step */
+            step?: number | null;
+            /** Tool */
+            tool?: string | null;
         };
     };
     responses: never;
@@ -893,6 +1508,353 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Approval"];
+                };
+            };
+            /** @description No verified identity on the request */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The caller's scopes do not open this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description No such resource */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The resource is not in a state that allows this */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The request did not validate */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description An upstream service failed */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+        };
+    };
+    findings_list_findings: {
+        parameters: {
+            query?: {
+                /** @description One environment, or 'all' for every readable one */
+                env?: string;
+                status?: components["schemas"]["FindingStatus"];
+                /** @description '365d' is for closed findings */
+                window?: components["schemas"]["FindingWindow"];
+                /** @description Include the findings triage wrote without investigating */
+                triage?: boolean;
+                severity?: string[];
+                outcome?: string[];
+                effort?: string[];
+                confidence?: string[];
+                type?: string[];
+                /** @description A kind, or 'has_linked' or 'repeating' for those findings */
+                kind?: string[];
+                tool?: string[];
+                model?: string[];
+                resolution?: string[];
+                resolved_by?: string[];
+                /** @description Matches title, alarm, resource or error signature */
+                q?: string;
+                offset?: number;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingList"];
+                };
+            };
+            /** @description The request names something this deployment cannot act on */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description No verified identity on the request */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The caller's scopes do not open this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The request did not validate */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description An upstream service failed */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+        };
+    };
+    findings_get_finding: {
+        parameters: {
+            query: {
+                /** @description One environment; 'all' is refused */
+                env: string;
+            };
+            header?: never;
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingDetail"];
+                };
+            };
+            /** @description The request names something this deployment cannot act on */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description No verified identity on the request */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The caller's scopes do not open this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description No such resource */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The request did not validate */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description An upstream service failed */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+        };
+    };
+    findings_acknowledge_finding: {
+        parameters: {
+            query: {
+                /** @description One environment; 'all' is refused */
+                env: string;
+            };
+            header?: never;
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingDetail"];
+                };
+            };
+            /** @description The request names something this deployment cannot act on */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description No verified identity on the request */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The caller's scopes do not open this */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description No such resource */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The resource is not in a state that allows this */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description The request did not validate */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+            /** @description An upstream service failed */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
+                };
+            };
+        };
+    };
+    findings_close_finding: {
+        parameters: {
+            query: {
+                /** @description One environment; 'all' is refused */
+                env: string;
+            };
+            header?: never;
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResolveFindingBody"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingDetail"];
+                };
+            };
+            /** @description The request names something this deployment cannot act on */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorBody"];
                 };
             };
             /** @description No verified identity on the request */

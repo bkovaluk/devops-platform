@@ -35,6 +35,8 @@ describe('the tool registry', () => {
     // The inbox shows requests about what you can read; reviewing alone sees none.
     expect(canOpen(grantsOf(['flags:read']), TOOL_REGISTRY.approvals)).toBe(true)
     expect(canOpen(grantsOf(['approvals:review']), TOOL_REGISTRY.approvals)).toBe(false)
+    expect(canOpen(viewer, TOOL_REGISTRY.investigations)).toBe(false)
+    expect(canOpen(grantsOf(['findings:read:prod']), TOOL_REGISTRY.investigations)).toBe(true)
   })
 
   it('gives a principal with no workspace no rail at all', () => {
@@ -44,7 +46,7 @@ describe('the tool registry', () => {
 
   it('orders the rail and the digit shortcuts by rank', () => {
     expect(navFor(viewer).map((tool) => tool.id)).toEqual(['home', 'approvals', 'flags'])
-    expect(shortcutsFor(admin)).toEqual(['/', '/approvals', '/flags'])
+    expect(shortcutsFor(admin)).toEqual(['/', '/approvals', '/flags', '/investigations'])
   })
 
   it('hands shared surfaces only the contributions of tools they may open', () => {
@@ -58,6 +60,7 @@ describe('the tool registry', () => {
   it('finds the tool a pathname belongs to', () => {
     expect(toolForPath('/flags/staging/checkout-v2').id).toBe('flags')
     expect(toolForPath('/approvals').id).toBe('approvals')
+    expect(toolForPath('/investigations/prod/f-checkout-0001').id).toBe('investigations')
     expect(toolForPath('/').id).toBe('home')
     expect(toolForPath('/flagsmith').id).toBe('home')
   })

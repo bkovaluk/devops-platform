@@ -17,3 +17,4 @@ export {
   FlagsPalette,
   FlagsQuickAction,
 } from './flags'
+export { InvestigationsAttention, InvestigationsHomeTile } from './investigations'

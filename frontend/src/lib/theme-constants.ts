@@ -9,6 +9,7 @@ export const TOOL_ACCENTS = {
   brand: { text: 'text-emerald-400' },
   flags: { text: 'text-cyan-400' },
   approvals: { text: 'text-amber-400' },
+  investigations: { text: 'text-indigo-400' },
 } as const satisfies Record<string, { text: string }>
 
 export type ToolAccent = keyof typeof TOOL_ACCENTS

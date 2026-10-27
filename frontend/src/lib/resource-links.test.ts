@@ -8,6 +8,8 @@ const LINKS: readonly [ResourceLink, string][] = [
   [{ kind: 'flag', key: 'checkout-v2', env: 'staging' }, '/flags/$env/$key'],
   [{ kind: 'flags', env: 'prod' }, '/flags/'],
   [{ kind: 'approval', id: 'apr_1001' }, '/approvals'],
+  [{ kind: 'finding', id: 'f-checkout-0001', env: 'prod' }, '/investigations/$env/$findingId'],
+  [{ kind: 'findings', env: 'staging' }, '/investigations/'],
 ]
 
 describe('resource links', () => {

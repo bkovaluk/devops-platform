@@ -13,8 +13,9 @@ describe('the shell', () => {
       expect(
         within(nav)
           .getAllByRole('link')
-          .map((link) => link.textContent),
-      ).toEqual(['Home', 'Approvals', 'Feature flags']),
+          // A rail row ends in its count once the count has loaded.
+          .map((link) => link.textContent?.replace(/\d+$/, '')),
+      ).toEqual(['Home', 'Approvals', 'Feature flags', 'Investigations']),
     )
   })
 

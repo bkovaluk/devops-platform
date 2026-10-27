@@ -15,7 +15,7 @@
  * tools the principal can open; role names belong nowhere — gate on a scope.
  */
 import type { useNavigate } from '@tanstack/react-router'
-import { Flag, GitPullRequest, LayoutDashboard, Plus } from 'lucide-react'
+import { Flag, GitPullRequest, LayoutDashboard, Plus, Siren } from 'lucide-react'
 import { type ComponentType, type ElementType, lazy } from 'react'
 import { type Grants, inAnyEnv, type Scope, type Tool } from '@/features/auth/permissions'
 import { TOOL_ACCENTS } from '@/lib/theme-constants'
@@ -29,17 +29,19 @@ import {
   FlagsHomeTile,
   FlagsPalette,
   FlagsQuickAction,
+  InvestigationsAttention,
+  InvestigationsHomeTile,
   type PaletteContributionProps,
 } from './contributions'
 
-export type ToolId = 'home' | 'approvals' | 'flags'
+export type ToolId = 'home' | 'approvals' | 'flags' | 'investigations'
 
 /** Where a tool sits in the rail. `inbox` is the queue that spans every tool,
  *  right under Home; `hidden` tools are reachable by link and palette only. */
 export type ToolGroup = 'shell' | 'inbox' | 'tools' | 'hidden'
 
 /** The route a tool's rail row, Home tile and palette entry open. */
-export type ToolPath = '/' | '/approvals' | '/flags'
+export type ToolPath = '/' | '/approvals' | '/flags' | '/investigations'
 
 /**
  * What it takes to open a tool. `scoped` names the API tool and `entry`, the
@@ -51,6 +53,13 @@ export type ToolPath = '/' | '/approvals' | '/flags'
 export type ToolAccess =
   | { kind: 'scoped'; tool: Tool; entry: readonly Scope[] }
   | { kind: 'public' }
+
+/**
+ * How the shell's environment pick steers a tool. `any`: the tool shows the
+ * env picked, or every env the principal reaches. `none`: the tool is tied to
+ * no env, so the breadcrumb says so and offers no pick while it is open.
+ */
+export type ToolEnvKind = 'any' | 'none'
 
 export type Navigate = ReturnType<typeof useNavigate>
 
@@ -105,6 +114,14 @@ export interface ToolDefinition {
   /** The tool's root view. The router mounts it behind `ToolBoundary`. */
   view: ComponentType
   access: ToolAccess
+  env: ToolEnvKind
+  /** Every env holds an item of the same name (a flag key), so picking
+   *  another env on an item's page opens the same item there. Without it the
+   *  pick returns to the tool's list in the env picked. */
+  itemInEveryEnv?: boolean
+  /** The tool's writes outside the direct envs become approval requests, so
+   *  the shell's banner says so for the env on screen. */
+  approvalRouted?: boolean
   /** Document-title segment: "<title> | <app name>". Home has none. */
   title?: string
   homeTile?: { rank: number; component: ComponentType }
@@ -123,6 +140,11 @@ const ApprovalsView = lazy(() =>
 const FlagsView = lazy(() =>
   import('@/app/flags/FlagsView').then((m) => ({ default: m.FlagsView })),
 )
+const InvestigationsView = lazy(() =>
+  import('@/app/investigations/InvestigationsView').then((m) => ({
+    default: m.InvestigationsView,
+  })),
+)
 
 /** Keyed by id so the type system insists every tool is declared exactly once. */
 export const TOOL_REGISTRY: Readonly<Record<ToolId, ToolDefinition>> = {
@@ -135,6 +157,7 @@ export const TOOL_REGISTRY: Readonly<Record<ToolId, ToolDefinition>> = {
     path: '/',
     view: HomePage,
     access: { kind: 'public' },
+    env: 'none',
     shortcutRank: 0,
   },
   approvals: {
@@ -148,6 +171,7 @@ export const TOOL_REGISTRY: Readonly<Record<ToolId, ToolDefinition>> = {
     // The inbox lists the requests of every tool the principal can read, in the
     // envs they can read it; reviewing is a separate grant, asked per row.
     access: { kind: 'scoped', tool: 'approvals', entry: inAnyEnv('flags', 'read') },
+    env: 'none',
     title: 'Approvals',
     shortcutRank: 1,
     contributions: {
@@ -166,6 +190,9 @@ export const TOOL_REGISTRY: Readonly<Record<ToolId, ToolDefinition>> = {
     path: '/flags',
     view: FlagsView,
     access: { kind: 'scoped', tool: 'flags', entry: inAnyEnv('flags', 'read') },
+    env: 'any',
+    itemInEveryEnv: true,
+    approvalRouted: true,
     title: 'Flags',
     shortcutRank: 2,
     homeTile: { rank: 0, component: FlagsHomeTile },
@@ -186,6 +213,21 @@ export const TOOL_REGISTRY: Readonly<Record<ToolId, ToolDefinition>> = {
           navigate({ to: '/flags', search: (prev) => ({ ...prev, create: true }) }),
       },
     ],
+  },
+  investigations: {
+    id: 'investigations',
+    label: 'Investigations',
+    icon: Siren,
+    accent: TOOL_ACCENTS.investigations.text,
+    group: 'tools',
+    path: '/investigations',
+    view: InvestigationsView,
+    access: { kind: 'scoped', tool: 'findings', entry: inAnyEnv('findings', 'read') },
+    env: 'any',
+    title: 'Investigations',
+    shortcutRank: 3,
+    homeTile: { rank: 1, component: InvestigationsHomeTile },
+    contributions: { attention: InvestigationsAttention },
   },
 }
 

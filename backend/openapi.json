@@ -1,6 +1,15 @@
 {
   "components": {
     "schemas": {
+      "ActionKind": {
+        "enum": [
+          "change",
+          "code",
+          "read",
+          "approval"
+        ],
+        "type": "string"
+      },
       "AgentStatus": {
         "properties": {
           "enabled": {
@@ -194,6 +203,81 @@
         "title": "ApproveBody",
         "type": "object"
       },
+      "CheckedFact": {
+        "description": "A fact the agent verified with its tools, and the steps that show it.",
+        "properties": {
+          "steps": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Steps",
+            "type": "array"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "CheckedFact",
+        "type": "object"
+      },
+      "Confidence": {
+        "enum": [
+          "high",
+          "medium",
+          "low"
+        ],
+        "type": "string"
+      },
+      "ContextSummary": {
+        "description": "What the agent's context bundle held, never its content.",
+        "properties": {
+          "chars": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chars"
+          },
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Counts",
+            "type": "object"
+          },
+          "sections": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "default": {},
+            "title": "Sections",
+            "type": "object"
+          },
+          "truncated": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Truncated"
+          }
+        },
+        "title": "ContextSummary",
+        "type": "object"
+      },
       "ErrorBody": {
         "properties": {
           "detail": {
@@ -268,6 +352,1146 @@
         ],
         "title": "EvaluationSeries",
         "type": "object"
+      },
+      "Evidence": {
+        "description": "One fact the finding rests on, and the trail steps it came from.",
+        "properties": {
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kind"
+          },
+          "steps": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Steps",
+            "type": "array"
+          }
+        },
+        "title": "Evidence",
+        "type": "object"
+      },
+      "FindingAction": {
+        "description": "Something only a person can do: a change, a code fix, a denied read, an approval.",
+        "properties": {
+          "command": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Command"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "kind": {
+            "$ref": "#/components/schemas/ActionKind",
+            "default": "change"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "FindingAction",
+        "type": "object"
+      },
+      "FindingDetail": {
+        "description": "One finding whole, with the findings before it on the same resource.",
+        "properties": {
+          "account_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Account Id"
+          },
+          "acknowledged_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledged At"
+          },
+          "acknowledged_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledged By"
+          },
+          "actions": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/FindingAction"
+            },
+            "title": "Actions",
+            "type": "array"
+          },
+          "alarm_arn": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Arn"
+          },
+          "alarm_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Count"
+          },
+          "alarm_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Name"
+          },
+          "alarm_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Reason"
+          },
+          "alarm_time": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Time"
+          },
+          "checked": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/CheckedFact"
+            },
+            "title": "Checked",
+            "type": "array"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Confidence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "confidence_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confidence Reason"
+          },
+          "context_summary": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContextSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "env": {
+            "title": "Env",
+            "type": "string"
+          },
+          "error_signature": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Signature"
+          },
+          "evidence": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "title": "Evidence",
+            "type": "array"
+          },
+          "finding_id": {
+            "title": "Finding Id",
+            "type": "string"
+          },
+          "fix_effort": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fix Effort"
+          },
+          "fix_effort_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fix Effort Reason"
+          },
+          "history": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/FindingHistoryEntry"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "hypotheses": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Hypothesis"
+            },
+            "title": "Hypotheses",
+            "type": "array"
+          },
+          "incident_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Incident Id"
+          },
+          "kind": {
+            "default": "alarm",
+            "title": "Kind",
+            "type": "string"
+          },
+          "last_seen_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Seen At"
+          },
+          "likely_cause": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Likely Cause"
+          },
+          "linked_alarms": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Linked Alarms",
+            "type": "array"
+          },
+          "linked_count": {
+            "default": 0,
+            "title": "Linked Count",
+            "type": "integer"
+          },
+          "linked_to": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Linked To"
+          },
+          "member_alarms": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Member Alarms",
+            "type": "array"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The model id, shortened: 'opus-5.5'",
+            "title": "Model"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "previous_finding_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Previous Finding Id"
+          },
+          "prior_finding_ids": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Prior Finding Ids",
+            "type": "array"
+          },
+          "proposed_severity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Proposed Severity"
+          },
+          "recurrence_count": {
+            "default": 0,
+            "title": "Recurrence Count",
+            "type": "integer"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region"
+          },
+          "resolution": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Resolution"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resolution_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolution Note"
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved At"
+          },
+          "resolved_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved By"
+          },
+          "resource_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Key"
+          },
+          "resource_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The dimension value its key names, else the alarm's name",
+            "title": "Resource Name"
+          },
+          "resource_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The resource's kind, read off its key: 'Lambda', 'SQS'",
+            "title": "Resource Type"
+          },
+          "run": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RunSummary"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "severity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Severity"
+          },
+          "severity_floor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Severity Floor"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "'cloudwatch' or 'datadog'",
+            "title": "Source"
+          },
+          "sources_with_data": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Sources With Data",
+            "type": "array"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FindingStatus"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "suggested_actions": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Suggested Actions",
+            "type": "array"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "tokens_used": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tokens Used"
+          },
+          "tool_call_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Call Count"
+          },
+          "tool_trail": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/ToolTrailStep"
+            },
+            "title": "Tool Trail",
+            "type": "array"
+          },
+          "tools_used": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tools Used"
+          }
+        },
+        "required": [
+          "finding_id",
+          "env",
+          "created_at",
+          "status"
+        ],
+        "title": "FindingDetail",
+        "type": "object"
+      },
+      "FindingFacets": {
+        "description": "Counts over the window, the status and the triage rule, before any other filter.",
+        "properties": {
+          "confidence": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Confidence",
+            "type": "object"
+          },
+          "effort": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Effort",
+            "type": "object"
+          },
+          "kind": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Kind",
+            "type": "object"
+          },
+          "model": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Model",
+            "type": "object"
+          },
+          "outcome": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Outcome",
+            "type": "object"
+          },
+          "resolution": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Resolution",
+            "type": "object"
+          },
+          "resolved_by": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Resolved By",
+            "type": "object"
+          },
+          "severity": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Severity",
+            "type": "object"
+          },
+          "tool": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Tool",
+            "type": "object"
+          },
+          "type": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Type",
+            "type": "object"
+          }
+        },
+        "title": "FindingFacets",
+        "type": "object"
+      },
+      "FindingHistoryEntry": {
+        "description": "An earlier finding on the same resource.",
+        "properties": {
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "finding_id": {
+            "title": "Finding Id",
+            "type": "string"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "resolution": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolution"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          }
+        },
+        "required": [
+          "finding_id"
+        ],
+        "title": "FindingHistoryEntry",
+        "type": "object"
+      },
+      "FindingList": {
+        "properties": {
+          "env": {
+            "description": "The environment selector the list was asked for",
+            "title": "Env",
+            "type": "string"
+          },
+          "facets": {
+            "$ref": "#/components/schemas/FindingFacets"
+          },
+          "items": {
+            "description": "Newest first, one page",
+            "items": {
+              "$ref": "#/components/schemas/FindingRow"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FindingStatus"
+          },
+          "total": {
+            "description": "Every finding the narrowing matches",
+            "title": "Total",
+            "type": "integer"
+          },
+          "truncated": {
+            "description": "An environment held more than one read takes",
+            "title": "Truncated",
+            "type": "boolean"
+          },
+          "window": {
+            "$ref": "#/components/schemas/FindingWindow"
+          }
+        },
+        "required": [
+          "env",
+          "status",
+          "window",
+          "items",
+          "total",
+          "facets",
+          "truncated"
+        ],
+        "title": "FindingList",
+        "type": "object"
+      },
+      "FindingRow": {
+        "description": "One finding as the list shows it.",
+        "properties": {
+          "acknowledged_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acknowledged By"
+          },
+          "alarm_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Count"
+          },
+          "alarm_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alarm Name"
+          },
+          "confidence": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Confidence"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string"
+          },
+          "env": {
+            "title": "Env",
+            "type": "string"
+          },
+          "error_signature": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Signature"
+          },
+          "finding_id": {
+            "title": "Finding Id",
+            "type": "string"
+          },
+          "fix_effort": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fix Effort"
+          },
+          "kind": {
+            "default": "alarm",
+            "title": "Kind",
+            "type": "string"
+          },
+          "linked_count": {
+            "default": 0,
+            "title": "Linked Count",
+            "type": "integer"
+          },
+          "model": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The model id, shortened: 'opus-5.5'",
+            "title": "Model"
+          },
+          "outcome": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Outcome"
+          },
+          "recurrence_count": {
+            "default": 0,
+            "title": "Recurrence Count",
+            "type": "integer"
+          },
+          "resolution": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Resolution"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resolved_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved At"
+          },
+          "resolved_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resolved By"
+          },
+          "resource_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resource Key"
+          },
+          "resource_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The dimension value its key names, else the alarm's name",
+            "title": "Resource Name"
+          },
+          "resource_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The resource's kind, read off its key: 'Lambda', 'SQS'",
+            "title": "Resource Type"
+          },
+          "severity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Severity"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "'cloudwatch' or 'datadog'",
+            "title": "Source"
+          },
+          "status": {
+            "$ref": "#/components/schemas/FindingStatus"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "tool_call_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool Call Count"
+          },
+          "tools_used": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tools Used"
+          }
+        },
+        "required": [
+          "finding_id",
+          "env",
+          "created_at",
+          "status"
+        ],
+        "title": "FindingRow",
+        "type": "object"
+      },
+      "FindingStatus": {
+        "enum": [
+          "open",
+          "acknowledged",
+          "closed"
+        ],
+        "type": "string"
+      },
+      "FindingWindow": {
+        "enum": [
+          "24h",
+          "7d",
+          "30d",
+          "90d",
+          "365d"
+        ],
+        "type": "string"
       },
       "Flag": {
         "properties": {
@@ -446,6 +1670,44 @@
         "title": "Health",
         "type": "object"
       },
+      "Hypothesis": {
+        "description": "A cause the agent considered, where it ended up, and the steps that tested it.",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/HypothesisState",
+            "default": "unverified"
+          },
+          "steps": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Steps",
+            "type": "array"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          }
+        },
+        "title": "Hypothesis",
+        "type": "object"
+      },
+      "HypothesisState": {
+        "enum": [
+          "likely",
+          "ruled_out",
+          "unverified"
+        ],
+        "type": "string"
+      },
       "Me": {
         "properties": {
           "email": {
@@ -534,6 +1796,251 @@
           "note"
         ],
         "title": "RejectBody",
+        "type": "object"
+      },
+      "Resolution": {
+        "enum": [
+          "confirmed",
+          "false_positive",
+          "wrong",
+          "dismissed"
+        ],
+        "type": "string"
+      },
+      "ResolveFindingBody": {
+        "properties": {
+          "note": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required for 'wrong'",
+            "title": "Note"
+          },
+          "resolution": {
+            "$ref": "#/components/schemas/Resolution"
+          }
+        },
+        "required": [
+          "resolution"
+        ],
+        "title": "ResolveFindingBody",
+        "type": "object"
+      },
+      "RunSummary": {
+        "description": "How the investigation ended: why it stopped and what it spent.",
+        "properties": {
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Seconds"
+          },
+          "max_turns": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Turns"
+          },
+          "stop_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stop Reason"
+          },
+          "token_budget": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Token Budget"
+          },
+          "turns": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Turns"
+          },
+          "weighted_tokens": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weighted Tokens"
+          }
+        },
+        "title": "RunSummary",
+        "type": "object"
+      },
+      "ToolCall": {
+        "description": "What a step called, as the agent describes it; the UI renders this, never the args.\n\n``label`` is ``provider.service.action`` (``aws.s3.list_object_versions``);\n``refused`` is set when a guard blocked the call.",
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "kind": {
+            "default": "evidence",
+            "enum": [
+              "evidence",
+              "lookup"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "refused": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refused"
+          },
+          "service": {
+            "title": "Service",
+            "type": "string"
+          },
+          "subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject"
+          }
+        },
+        "required": [
+          "provider",
+          "service",
+          "action",
+          "label"
+        ],
+        "title": "ToolCall",
+        "type": "object"
+      },
+      "ToolTrailStep": {
+        "description": "One tool call of the investigation; its output is never kept.",
+        "properties": {
+          "args": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Args"
+          },
+          "call": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ToolCall"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "input": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Input"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "data",
+                  "empty",
+                  "error"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "step": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Step"
+          },
+          "tool": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tool"
+          }
+        },
+        "title": "ToolTrailStep",
         "type": "object"
       }
     }
@@ -1166,6 +2673,640 @@
         "summary": "Withdraw",
         "tags": [
           "approvals"
+        ]
+      }
+    },
+    "/api/findings": {
+      "get": {
+        "description": "One status's findings over a window, faceted and filtered, newest first.",
+        "operationId": "findings_list_findings",
+        "parameters": [
+          {
+            "description": "One environment, or 'all' for every readable one",
+            "in": "query",
+            "name": "env",
+            "required": false,
+            "schema": {
+              "default": "all",
+              "description": "One environment, or 'all' for every readable one",
+              "title": "Env",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/FindingStatus",
+              "default": "open"
+            }
+          },
+          {
+            "description": "'365d' is for closed findings",
+            "in": "query",
+            "name": "window",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/FindingWindow",
+              "default": "30d",
+              "description": "'365d' is for closed findings"
+            }
+          },
+          {
+            "description": "Include the findings triage wrote without investigating",
+            "in": "query",
+            "name": "triage",
+            "required": false,
+            "schema": {
+              "default": false,
+              "description": "Include the findings triage wrote without investigating",
+              "title": "Triage",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "severity",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Severity",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "outcome",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Outcome",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "effort",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Effort",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "confidence",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Confidence",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Type",
+              "type": "array"
+            }
+          },
+          {
+            "description": "A kind, or 'has_linked' or 'repeating' for those findings",
+            "in": "query",
+            "name": "kind",
+            "required": false,
+            "schema": {
+              "default": [],
+              "description": "A kind, or 'has_linked' or 'repeating' for those findings",
+              "items": {
+                "type": "string"
+              },
+              "title": "Kind",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "tool",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Tool",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "model",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Model",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resolution",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Resolution",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "resolved_by",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Resolved By",
+              "type": "array"
+            }
+          },
+          {
+            "description": "Matches title, alarm, resource or error signature",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "default": "",
+              "description": "Matches title, alarm, resource or error signature",
+              "maxLength": 200,
+              "title": "Q",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingList"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request names something this deployment cannot act on"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "No verified identity on the request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The caller's scopes do not open this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request did not validate"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "An upstream service failed"
+          }
+        },
+        "summary": "List Findings",
+        "tags": [
+          "findings"
+        ]
+      }
+    },
+    "/api/findings/{finding_id}": {
+      "get": {
+        "description": "One finding, with the earlier findings on the same resource.",
+        "operationId": "findings_get_finding",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "finding_id",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "title": "Finding Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "One environment; 'all' is refused",
+            "in": "query",
+            "name": "env",
+            "required": true,
+            "schema": {
+              "description": "One environment; 'all' is refused",
+              "title": "Env",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request names something this deployment cannot act on"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "No verified identity on the request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The caller's scopes do not open this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "No such resource"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request did not validate"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "An upstream service failed"
+          }
+        },
+        "summary": "Get Finding",
+        "tags": [
+          "findings"
+        ]
+      }
+    },
+    "/api/findings/{finding_id}/acknowledge": {
+      "post": {
+        "description": "Take an open finding: somebody is looking at it.",
+        "operationId": "findings_acknowledge_finding",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "finding_id",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "title": "Finding Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "One environment; 'all' is refused",
+            "in": "query",
+            "name": "env",
+            "required": true,
+            "schema": {
+              "description": "One environment; 'all' is refused",
+              "title": "Env",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request names something this deployment cannot act on"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "No verified identity on the request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The caller's scopes do not open this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "No such resource"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request did not validate"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "An upstream service failed"
+          }
+        },
+        "summary": "Acknowledge Finding",
+        "tags": [
+          "findings"
+        ]
+      }
+    },
+    "/api/findings/{finding_id}/close": {
+      "post": {
+        "description": "Close a finding with a verdict on what the agent reported.",
+        "operationId": "findings_close_finding",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "finding_id",
+            "required": true,
+            "schema": {
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9._:-]+$",
+              "title": "Finding Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "One environment; 'all' is refused",
+            "in": "query",
+            "name": "env",
+            "required": true,
+            "schema": {
+              "description": "One environment; 'all' is refused",
+              "title": "Env",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveFindingBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request names something this deployment cannot act on"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "No verified identity on the request"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The caller's scopes do not open this"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "No such resource"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The resource is not in a state that allows this"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "The request did not validate"
+          },
+          "502": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorBody"
+                }
+              }
+            },
+            "description": "An upstream service failed"
+          }
+        },
+        "summary": "Close Finding",
+        "tags": [
+          "findings"
         ]
       }
     },

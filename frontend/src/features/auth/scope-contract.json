@@ -23,6 +23,46 @@
     {
       "expected": true,
       "grant": "*",
+      "required": "findings:read"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "findings:review"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "*",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": true,
+      "grant": "*",
       "required": "flags:read"
     },
     {
@@ -276,6 +316,386 @@
       "required": "approvals:review:staging"
     },
     {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:read"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:review"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:dev",
+      "required": "findings:read"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*:dev",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:dev",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:dev",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:dev",
+      "required": "findings:review"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*:dev",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:dev",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:dev",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:prod",
+      "required": "findings:read"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:prod",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*:prod",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:prod",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:prod",
+      "required": "findings:review"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:prod",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*:prod",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:prod",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:staging",
+      "required": "findings:read"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:staging",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:staging",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*:staging",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:staging",
+      "required": "findings:review"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:staging",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:*:staging",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:*:staging",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "approvals:review"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "approvals:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "approvals:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "approvals:review:staging"
+    },
+    {
+      "expected": true,
+      "grant": "findings:read",
+      "required": "findings:read"
+    },
+    {
+      "expected": true,
+      "grant": "findings:read",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:read",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:read",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "findings:review"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:dev",
+      "required": "findings:read"
+    },
+    {
+      "expected": true,
+      "grant": "findings:read:dev",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:dev",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:dev",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:prod",
+      "required": "findings:read"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:prod",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:read:prod",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:prod",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:staging",
+      "required": "findings:read"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:staging",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:read:staging",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:read:staging",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review",
+      "required": "findings:read"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review",
+      "required": "findings:read:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review",
+      "required": "findings:read:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review",
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": true,
+      "grant": "findings:review",
+      "required": "findings:review"
+    },
+    {
+      "expected": true,
+      "grant": "findings:review",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:review",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:review",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:dev",
+      "required": "findings:review"
+    },
+    {
+      "expected": true,
+      "grant": "findings:review:dev",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:dev",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:dev",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:prod",
+      "required": "findings:review"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:prod",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": true,
+      "grant": "findings:review:prod",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:prod",
+      "required": "findings:review:staging"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:staging",
+      "required": "findings:review"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:staging",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "findings:review:staging",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": true,
+      "grant": "findings:review:staging",
+      "required": "findings:review:staging"
+    },
+    {
       "expected": "invalid",
       "grant": "flags",
       "required": "flags:read"
@@ -468,22 +888,42 @@
     {
       "expected": false,
       "grant": "flags:read",
-      "required": "approvals:review"
+      "required": "findings:read"
     },
     {
       "expected": false,
       "grant": "flags:read",
-      "required": "approvals:review:dev"
+      "required": "findings:read:dev"
     },
     {
       "expected": false,
       "grant": "flags:read",
-      "required": "approvals:review:prod"
+      "required": "findings:read:prod"
     },
     {
       "expected": false,
       "grant": "flags:read",
-      "required": "approvals:review:staging"
+      "required": "findings:read:staging"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "findings:review"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "findings:review:dev"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "findings:review:prod"
+    },
+    {
+      "expected": false,
+      "grant": "flags:read",
+      "required": "findings:review:staging"
     },
     {
       "expected": "invalid",
@@ -759,18 +1199,26 @@
     ],
     "editor": [
       "flags:read",
-      "flags:write"
+      "flags:write",
+      "findings:read",
+      "findings:review"
     ],
     "reviewer": [
       "flags:read",
-      "approvals:review"
+      "approvals:review",
+      "findings:read"
     ],
     "viewer": [
-      "flags:read"
+      "flags:read",
+      "findings:read"
     ]
   },
   "tools": {
     "approvals": [
+      "review"
+    ],
+    "findings": [
+      "read",
       "review"
     ],
     "flags": [

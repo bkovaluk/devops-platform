@@ -80,6 +80,9 @@ its shape. The steps use a hypothetical `widgets` tool whose noun is `widget`.
    icon, `accent: TOOL_ACCENTS.widgets.text` (add it to
    `src/lib/theme-constants.ts`), group, path (add it to `ToolPath`), a lazy
    view, `access: { kind: 'scoped', tool: 'widgets', entry: inAnyEnv('widgets', 'read') }`,
+   `env` (`'any'` when the env pick steers it, `'none'` when it is tied to no
+   env), `itemInEveryEnv` when every env holds an item of the same name,
+   `approvalRouted` when its writes outside the direct envs become requests,
    title, `shortcutRank`, `homeTile`, `paletteCommands`, and contributions in
    `src/features/tools/contributions/widgets.tsx` (each reads its own tool only).
 5. **Links.** Add `{ kind: 'widget', ... }` to `ResourceLink` in
